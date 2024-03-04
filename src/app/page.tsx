@@ -12,8 +12,8 @@ import Video from "@/components/Video";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Free Next.js Template for Startup and SaaS",
-  description: "This is Home for Startup Nextjs Template",
+  title: "Ninja Unity 2D Game",
+  description: "The strongest, smartest and most cunning Ninja will emerge victorious, their name whispered in awe and fear throughout the land",
   // other metadata
 };
 
