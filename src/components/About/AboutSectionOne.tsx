@@ -64,7 +64,7 @@ const AboutSectionOne = () => {
                   
                   Other ninjas, equally skilled and ambitious, seek to claim the same prize, and in the shadowy world of shinobi, trust is a rare commodity indeed.<br /> 
                   
-                  As you rise through the ranks and earn renown as a formidable warrior, you must navigate the intricate web of alliances and betrayals that define the ninjas way.<br /> 
+                  As you rise through the ranks and earn renown as a formidable warrior, you must navigate the intricate web of alliances and betrayals that define the ninja s way.<br /> 
 
                   In the end, only the strongest, smartest, and most cunning ninja will emerge victorious, their name whispered in awe and fear throughout the land.<br /> 
                   
