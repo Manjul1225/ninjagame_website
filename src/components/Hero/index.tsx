@@ -27,13 +27,13 @@ const Hero = () => {
             <Image src="/images/hero/Img1.jpg" width={1800} height={1500} alt="img1" />
           </div>
           <div>
-            <Image src="/images/hero/Img2.jpg" width={1800} height={1500} />
+            <Image src="/images/hero/Img2.jpg" width={1800} height={1500} alt="img2"/>
           </div>
           <div>
-            <Image src="/images/hero/Img3.jpg" width={1800} height={1500} />
+            <Image src="/images/hero/Img3.jpg" width={1800} height={1500} alt="img3"/>
           </div>
           <div>
-            <Image src="/images/hero/Img4.png" width={1800} height={1500} />
+            <Image src="/images/hero/Img4.png" width={1800} height={1500} alt="img4"/>
           </div>
         </Carousel>
         <div className="absolute right-0 top-0 z-[-1] opacity-30 lg:opacity-100">

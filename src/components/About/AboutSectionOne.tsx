@@ -1,4 +1,3 @@
-import Image from "next/image";
 import SectionTitle from "../Common/SectionTitle";
 
 const checkIcon = (
@@ -24,11 +23,10 @@ const AboutSectionOne = () => {
           <div className="w-full px-4">
             <div className="mx-auto max-w-[1400px] text-left">
               <SectionTitle
-                title="BackStory."
+                title="BackStory"
                 paragraph=""
                 mb="30px"
               />
-
                 <p className="text-base font-medium leading-relaxed text-body-color sm:text-lg sm:leading-relaxed">
                   You are a young ninja, born into a world of shadows and secrets, where mastery of the martial arts and cunning intellect are prized above all else.<br />
                   
@@ -75,23 +73,6 @@ const AboutSectionOne = () => {
                   The choice is yours, young ninja. Choose wisely, for your destiny awaits.
                 </p>
             </div>
-
-            {/* <div className="w-full px-4 lg:w-1/2">
-              <div className="relative mx-auto aspect-[25/24] max-w-[500px] lg:mr-0">
-                <Image
-                  src="/images/about/about-image.svg"
-                  alt="about-image"
-                  fill
-                  className="mx-auto max-w-full drop-shadow-three dark:hidden dark:drop-shadow-none lg:mr-0"
-                />
-                <Image
-                  src="/images/about/about-image-dark.svg"
-                  alt="about-image"
-                  fill
-                  className="mx-auto hidden max-w-full drop-shadow-three dark:block dark:drop-shadow-none lg:mr-0"
-                />
-              </div>
-            </div> */}
           </div>
         </div>
       </div>
