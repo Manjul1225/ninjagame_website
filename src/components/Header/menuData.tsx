@@ -98,11 +98,29 @@ const menuData: Menu[] = [
   //     },
   //   ],
   // },
-  {
-    id: 5,
-    title: "Point: 500",
-    path: "/",
-    newTab: false,
-  },
+  // {
+  //   id: 46,
+  //   title: "Sign In Page",
+  //   path: "/signin",
+  //   newTab: false,
+  // },
+  // {
+  //   id: 47,
+  //   title: "Sign Up Page",
+  //   path: "/signup",
+  //   newTab: false,
+  // },
+  // {
+  //   id: 7,
+  //   title: "Point: 500",
+  //   path: "/",
+  //   newTab: false,
+  // },
+  // {
+  //   id: 8,
+  //   title: "Logout",
+  //   path: "/",
+  //   newTab: false,
+  // },
 ];
 export default menuData;

@@ -45,44 +45,47 @@ const Hero = () => {
             xmlns="http://www.w3.org/2000/svg"
           >
             <circle
+              opacity="0.3"
               cx="277"
               cy="63"
               r="225"
               fill="url(#paint0_linear_25:217)"
             />
             <circle
-              cx="17.9997"
-              cy="182"
+              cx="20"
+              cy="15"
               r="18"
               fill="url(#paint1_radial_25:217)"
             />
             <circle
+              
               cx="76.9997"
               cy="288"
               r="34"
               fill="url(#paint2_radial_25:217)"
             />
             <circle
-              cx="325.486"
-              cy="302.87"
+              opacity="0.3"
+              cx="425.486"
+              cy="102.87"
               r="180"
               transform="rotate(-37.6852 325.486 302.87)"
               fill="url(#paint3_linear_25:217)"
             />
             <circle
               opacity="0.8"
-              cx="184.521"
-              cy="315.521"
-              r="132.862"
+              cx="0.521"
+              cy="395.521"
+              r="32.862"
               transform="rotate(114.874 184.521 315.521)"
               stroke="url(#paint4_linear_25:217)"
             />
             <circle
               opacity="0.8"
-              cx="356"
-              cy="290"
-              r="179.5"
-              transform="rotate(-30 356 290)"
+              cx="20"
+              cy="20"
+              r="20"
+              transform="rotate(-30 20 20)"
               stroke="url(#paint5_linear_25:217)"
             />
             <circle
@@ -174,7 +177,7 @@ const Hero = () => {
             </defs>
           </svg>
         </div>
-        <div className="absolute bottom-0 left-0 z-[-1] opacity-30 lg:opacity-100">
+        <div className="absolute top-0 left-20 z-[-1] opacity-30 lg:opacity-100">
           <svg
             width="364"
             height="201"
@@ -206,12 +209,12 @@ const Hero = () => {
               transform="rotate(-13.421 214.505 60.5054)"
               stroke="url(#paint4_linear_25:218)"
             />
-            <circle cx="220" cy="63" r="43" fill="url(#paint5_radial_25:218)" />
+            <circle cx="215" cy="60" r="43" fill="url(#paint5_radial_25:218)" />
             <defs>
               <linearGradient
                 id="paint0_linear_25:218"
-                x1="184.389"
-                y1="69.2405"
+                x1="0"
+                y1="0"
                 x2="184.389"
                 y2="212.24"
                 gradientUnits="userSpaceOnUse"
@@ -221,7 +224,7 @@ const Hero = () => {
               </linearGradient>
               <linearGradient
                 id="paint1_linear_25:218"
-                x1="156.389"
+                x1="0"
                 y1="69.2405"
                 x2="156.389"
                 y2="212.24"

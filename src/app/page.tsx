@@ -1,3 +1,5 @@
+"use client"
+
 import AboutSectionOne from "@/components/About/AboutSectionOne";
 import AboutSectionTwo from "@/components/About/AboutSectionTwo";
 import Blog from "@/components/Blog";
@@ -9,20 +11,23 @@ import Hero from "@/components/Hero";
 import Pricing from "@/components/Pricing";
 import Testimonials from "@/components/Testimonials";
 import Video from "@/components/Video";
-import { Metadata } from "next";
+import { useEffect, useState } from "react";
 
-export const metadata: Metadata = {
-  title: "Ninja Unity 2D Game",
-  description: "The strongest, smartest and most cunning Ninja will emerge victorious, their name whispered in awe and fear throughout the land",
-  // other metadata
-};
 
 export default function Home() {
+  const [entityToken, setEntityToken] = useState('');
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('entity_token')
+    setEntityToken(token)
+  });
   return (
     <>
       <ScrollUp />
       <Hero />
-      <Game />
+      {
+        entityToken ? <Game /> : null
+      }
       <Video />
       <Brands />
       <AboutSectionOne />
