@@ -123,7 +123,7 @@ const SignupPage = () => {
                       className="mb-3 block text-sm text-dark dark:text-white"
                     >
                       {" "}
-                      User Name{" "}
+                      UserName{" "}
                     </label>
                     <input
                       type="text"
