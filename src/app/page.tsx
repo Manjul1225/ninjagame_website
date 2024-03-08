@@ -25,9 +25,6 @@ export default function Home() {
     <>
       <ScrollUp />
       <Hero />
-      {
-        entityToken ? <Game /> : null
-      }
       <Video />
       <Brands />
       <AboutSectionOne />
