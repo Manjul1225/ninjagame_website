@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useRouter } from 'next/navigation';
 
 const SignupPage = () => {
-
   const router = useRouter();
   const [fullname, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -36,14 +35,31 @@ const SignupPage = () => {
 
       router.push('/');
 
-      sessionStorage.setItem("entity_token", json_response.data.EntityToken.EntityToken)
-      sessionStorage.setItem("display_name", json_response.data.UserName)
+      sessionStorage.setItem("entity_token", json_response.data.EntityToken.EntityToken)      
       sessionStorage.setItem("entity_type", json_response.data.EntityToken.Entity.Type)
       sessionStorage.setItem("entity_id", json_response.data.EntityToken.Entity.Id)
 
       const sessionTicket = json_response.data.SessionTicket;
-      // console.log("sessionTicket===========>");
-      // console.log(sessionTicket);
+
+      
+      const responsetoken = await fetch(`https://68C7C.playfabapi.com/Client/UpdateAvatarUrl`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Authorization': sessionTicket,
+        },
+        body: JSON.stringify({
+          ImageUrl: sessionTicket
+        }),
+      });
+
+      if (!responsetoken.ok) {
+        throw new Error('Failed to update avatar URL');
+      }
+
+      // const updateResult = await responsetoken.json();
+      // console.log('Avatar update result:=========>', updateResult);
+
 
       const dataResponse = await fetch('https://68C7C.playfabapi.com/Client/GetAccountInfo', {
         method: 'POST',
@@ -55,10 +71,6 @@ const SignupPage = () => {
       });
 
       const data = await dataResponse.json();
-      // console.log("Usename =============>")
-      // console.log(data);
-      // console.log("UserName = ")
-      // console.log(data.data.AccountInfo.Username)
       sessionStorage.setItem("user_name", data.data.AccountInfo.Username)
 
 
@@ -79,12 +91,7 @@ const SignupPage = () => {
         body: JSON.stringify(requestBody),
       });
 
-      // Handle the response
-      // console.log("Data ==============>")
       const point = await response.json();
-      // console.log(point);
-      // console.log("point ==============>")
-      // console.log(point.data.Data.Point.Value);
       if (point.data.Data.Point != null)
         sessionStorage.setItem("user_point", point.data.Data.Point.Value);
       else sessionStorage.setItem("user_point", '0');
@@ -92,7 +99,6 @@ const SignupPage = () => {
       alert("Registered!")
     }
     catch (error) {
-      // console.log(error);
     }
   };
   return (

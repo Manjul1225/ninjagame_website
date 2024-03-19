@@ -16,7 +16,7 @@ const menuData: Menu[] = [
   {
     id: 3,
     title: "Buy Points",
-    path: "/",
+    path: "/admin",
     newTab: false,
   },
   {

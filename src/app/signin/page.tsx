@@ -3,24 +3,20 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
 
-
 const SigninPage = () => {
   const router = useRouter();
   const [username, setusername] = useState('');
-  // const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSignin = async (event) => {
     event.preventDefault();
     try {
-      // const loginResponse = await fetch('https://titleId.playfabapi.com/Client/LoginWithEmailAddress', {
       const loginResponse = await fetch('https://titleId.playfabapi.com/Client/LoginWithPlayFab', {
         method: 'POST',
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
         },
         body: JSON.stringify({
-          // Email: email,
           Username: username,
           Password: password,
           TitleId: "68C7C",
@@ -37,18 +33,13 @@ const SigninPage = () => {
 
       // Storing relevant data in session
       sessionStorage.setItem("entity_token", json_response.data.EntityToken.EntityToken)
-      sessionStorage.setItem("display_name", json_response.data.InfoResultPayload.PlayerProfile.DisplayName)
-      sessionStorage.setItem("entity_type", json_response.data.EntityToken.Entity.Type)
-      sessionStorage.setItem("entity_id", json_response.data.EntityToken.Entity.Id)
-
 
       // Successful login, redirect to home page         
       router.push('/');
 
       const sessionTicket = json_response.data.SessionTicket;
+
       sessionStorage.setItem("sessionTicket", json_response.data.SessionTicket)
-      // console.log("sessionTicket===========>");
-      // console.log(sessionTicket);
 
       const dataResponse = await fetch('https://68C7C.playfabapi.com/Client/GetAccountInfo', {
         method: 'POST',
@@ -60,10 +51,7 @@ const SigninPage = () => {
       });
 
       const data = await dataResponse.json();
-      // console.log("Usename =============>")
-      // console.log(data);
-      // console.log("UserName = ")
-      // console.log(data.data.AccountInfo.Username)
+
       sessionStorage.setItem("user_name", data.data.AccountInfo.Username)
 
 
@@ -84,20 +72,13 @@ const SigninPage = () => {
         body: JSON.stringify(requestBody),
       });
 
-      // Handle the response
-      // console.log("Data ==============>")
       const point = await response.json();
-      // console.log(point);
-      // console.log("point ==============>")
-      // console.log(point.data.Data.Point);
       if (point.data.Data.Point != null)
         sessionStorage.setItem("user_point", point.data.Data.Point.Value);
       else sessionStorage.setItem("user_point", '0');
-
     }
     catch (error) {
       alert("Username or Password incorrect!")
-      // console.log(error);
     }
   };
 

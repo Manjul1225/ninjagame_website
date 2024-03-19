@@ -8,7 +8,7 @@ import ScrollUp from "@/components/Common/ScrollUp";
 import Contact from "@/components/Contact";
 import Game from "@/components/Game";
 import Hero from "@/components/Hero";
-import Pricing from "@/components/Pricing";
+import Admin from "@/components/Admin";
 import Testimonials from "@/components/Testimonials";
 import Video from "@/components/Video";
 import { useEffect, useState } from "react";
@@ -30,9 +30,11 @@ export default function Home() {
       <AboutSectionOne />
       <AboutSectionTwo />
       <Testimonials />
-      <Pricing />
+      <Admin />
       <Blog />
       <Contact />
     </>
   );
 }
+
+
