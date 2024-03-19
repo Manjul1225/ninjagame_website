@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 
@@ -12,8 +13,13 @@ const Admin = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [players, setPlayers] = useState([]);
+  const { push } = useRouter()
 
   useEffect(() => {
+    const token = sessionStorage.getItem('entity_token')
+    if (!token) {
+      push('/')
+    }
     async function getData() {
       try {
         const playersResponse = await fetch(`https://7C688.playfabapi.com/Admin/GetPlayersInSegment`, {
@@ -31,14 +37,13 @@ const Admin = () => {
         }
 
         const playersInSegment = await playersResponse.json();
-        setPlayers(playersInSegment.data.PlayerProfiles);        
+        setPlayers(playersInSegment.data.PlayerProfiles);
 
       } catch (error) {
         // console.error('Error fetching player data:', error);
       }
     }
     getData();
-    
   }, []);
 
   // console.log(players);

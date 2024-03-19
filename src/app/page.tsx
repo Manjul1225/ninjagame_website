@@ -30,7 +30,6 @@ export default function Home() {
       <AboutSectionOne />
       <AboutSectionTwo />
       <Testimonials />
-      <Admin />
       <Blog />
       <Contact />
     </>

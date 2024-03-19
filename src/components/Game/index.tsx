@@ -1,4 +1,16 @@
+"use client";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
 const Game = () => {
+  const { push } = useRouter()
+  useEffect(() => {
+    const token = sessionStorage.getItem('entity_token')
+    if (!token) {
+      push('/')
+    }
+  }, []);
+
   return (
     <div >
     <iframe
