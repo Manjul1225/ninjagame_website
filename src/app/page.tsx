@@ -20,7 +20,7 @@ export default function Home() {
   useEffect(() => {
     const token = sessionStorage.getItem('entity_token')
     setEntityToken(token)
-  });
+  }, []);
   return (
     <>
       <ScrollUp />
