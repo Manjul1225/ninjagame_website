@@ -34,14 +34,14 @@ const Admin = () => {
         setPlayers(playersInSegment.data.PlayerProfiles);        
 
       } catch (error) {
-        console.error('Error fetching player data:', error);
+        // console.error('Error fetching player data:', error);
       }
     }
     getData();
     
   }, []);
 
-  console.log(players);
+  // console.log(players);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
