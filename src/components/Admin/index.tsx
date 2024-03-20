@@ -16,6 +16,7 @@ const Admin = () => {
   const { push } = useRouter()
 
   useEffect(() => {
+
     const token = sessionStorage.getItem('entity_token')
     if (!token) {
       push('/')
@@ -37,16 +38,18 @@ const Admin = () => {
         }
 
         const playersInSegment = await playersResponse.json();
-        setPlayers(playersInSegment.data.PlayerProfiles);
+        const sortedPlayers = playersInSegment.data.PlayerProfiles.sort((a, b) => new Date(b.Created) - new Date(a.Created));
+        setPlayers(sortedPlayers);
 
       } catch (error) {
         // console.error('Error fetching player data:', error);
       }
     }
     getData();
+    
   }, []);
 
-  // console.log(players);
+  console.log(players);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
