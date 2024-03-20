@@ -38,7 +38,7 @@ const Admin = () => {
         }
 
         const playersInSegment = await playersResponse.json();
-        const sortedPlayers = playersInSegment.data.PlayerProfiles.sort((a, b) => new Date(b.Created) - new Date(a.Created));
+        const sortedPlayers = playersInSegment.data.PlayerProfiles.sort((a, b) => new Date(b.Created).getTime() - new Date(a.Created).getTime());
         setPlayers(sortedPlayers);
 
       } catch (error) {
@@ -48,8 +48,6 @@ const Admin = () => {
     getData();
     
   }, []);
-
-  console.log(players);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
