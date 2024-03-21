@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRouter } from 'next/navigation';
 
 const SignupPage = () => {
+  const titleId = process.env.NEXT_PUBLIC_PlayFab_Title_ID;
   const router = useRouter();
   const [fullname, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -13,13 +14,13 @@ const SignupPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const signupResponse = await fetch('https://titleId.playfabapi.com/Client/RegisterPlayFabUser', {
+      const signupResponse = await fetch(`https://${titleId}.playfabapi.com/Client/RegisterPlayFabUser`, {
         method: 'POST',
         body: JSON.stringify({
           Username: fullname,
           Email: email,
           Password: password,
-          TitleId: "68C7C",
+          TitleId: titleId,
           RequireBothUsernameAndEmail: false,
         }),
         headers: {
@@ -36,32 +37,9 @@ const SignupPage = () => {
       router.push('/');
 
       sessionStorage.setItem("entity_token", json_response.data.EntityToken.EntityToken)      
-      sessionStorage.setItem("entity_type", json_response.data.EntityToken.Entity.Type)
-      sessionStorage.setItem("entity_id", json_response.data.EntityToken.Entity.Id)
 
       const sessionTicket = json_response.data.SessionTicket;
-
-      
-      const responsetoken = await fetch(`https://68C7C.playfabapi.com/Client/UpdateAvatarUrl`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Authorization': sessionTicket,
-        },
-        body: JSON.stringify({
-          ImageUrl: sessionTicket
-        }),
-      });
-
-      if (!responsetoken.ok) {
-        throw new Error('Failed to update avatar URL');
-      }
-
-      // const updateResult = await responsetoken.json();
-      // console.log('Avatar update result:=========>', updateResult);
-
-
-      const dataResponse = await fetch('https://68C7C.playfabapi.com/Client/GetAccountInfo', {
+      const dataResponse = await fetch(`https://${titleId}.playfabapi.com/Client/GetAccountInfo`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -69,32 +47,8 @@ const SignupPage = () => {
         },
         body: JSON.stringify(signupResponse),
       });
-
       const data = await dataResponse.json();
       sessionStorage.setItem("user_name", data.data.AccountInfo.Username)
-
-
-      const playFabEndpoint = 'https://68C7C.playfabapi.com/Client/GetUserData';
-
-      // Define the request body
-      const requestBody = {
-        PlayFabId: data.data.AccountInfo.PlayFabId,
-      };
-
-      // Make the API request to retrieve the player's data
-      const response = await fetch(playFabEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Authorization': sessionTicket, // Replace with the client session ticket
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      const point = await response.json();
-      if (point.data.Data.Point != null)
-        sessionStorage.setItem("user_point", point.data.Data.Point.Value);
-      else sessionStorage.setItem("user_point", '0');
 
       alert("Registered!")
     }

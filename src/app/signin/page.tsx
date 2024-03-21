@@ -1,17 +1,25 @@
 "use client"
+
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
 
 const SigninPage = () => {
-  const router = useRouter();
+  const secretKey = process.env.NEXT_PUBLIC_PlayFab_Secret_Keys;
+  const segmentId = process.env.NEXT_PUBLIC_PlayFab_Segments;
+  const titleId = process.env.NEXT_PUBLIC_PlayFab_Title_ID;
+
+  const [players, setPlayers] = useState([]);
+
   const [username, setusername] = useState('');
   const [password, setPassword] = useState('');
+
+  const router = useRouter();
 
   const handleSignin = async (event) => {
     event.preventDefault();
     try {
-      const loginResponse = await fetch('https://titleId.playfabapi.com/Client/LoginWithPlayFab', {
+      const loginResponse = await fetch(`https://${titleId}.playfabapi.com/Client/LoginWithPlayFab`, {
         method: 'POST',
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
@@ -19,7 +27,7 @@ const SigninPage = () => {
         body: JSON.stringify({
           Username: username,
           Password: password,
-          TitleId: "68C7C",
+          TitleId: titleId,
           InfoRequestParameters: {
             GetPlayerProfile: true
           }
@@ -41,7 +49,7 @@ const SigninPage = () => {
 
       sessionStorage.setItem("sessionTicket", json_response.data.SessionTicket)
 
-      const dataResponse = await fetch('https://68C7C.playfabapi.com/Client/GetAccountInfo', {
+      const dataResponse = await fetch(`https://${titleId}.playfabapi.com/Client/GetAccountInfo`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -52,30 +60,7 @@ const SigninPage = () => {
 
       const data = await dataResponse.json();
 
-      sessionStorage.setItem("user_name", data.data.AccountInfo.Username)
-
-
-      const playFabEndpoint = 'https://68C7C.playfabapi.com/Client/GetUserData';
-
-      // Define the request body
-      const requestBody = {
-        PlayFabId: data.data.AccountInfo.PlayFabId,
-      };
-
-      // Make the API request to retrieve the player's data
-      const response = await fetch(playFabEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Authorization': sessionTicket, // Replace with the client session ticket
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      const point = await response.json();
-      if (point.data.Data.Point != null)
-        sessionStorage.setItem("user_point", point.data.Data.Point.Value);
-      else sessionStorage.setItem("user_point", '0');
+      sessionStorage.setItem("user_name", data.data.AccountInfo.Username)      
     }
     catch (error) {
       alert("Username or Password incorrect!")

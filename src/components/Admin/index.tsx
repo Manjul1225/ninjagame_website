@@ -1,29 +1,37 @@
 "use client";
+
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 
 const Admin = () => {
-  const secretKey = 'OINS4Z6M6Y4361SGFG6ZQGIOGF1ORDXPOKBFTBRMAB7ZPUSMR5';
-  const segmentId = 'CA6478E00226BD37';
+  const secretKey = process.env.NEXT_PUBLIC_PlayFab_Secret_Keys;
+  const segmentId = process.env.NEXT_PUBLIC_PlayFab_Segments;
+  const titleId = process.env.NEXT_PUBLIC_PlayFab_Title_ID;
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5; // Number of items per page
+  const itemsPerPage = 10; // Number of items per page
 
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [players, setPlayers] = useState([]);
+
+  //point add by input value
+  const [inputValue, setInputValue] = useState('');
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
   const { push } = useRouter()
 
   useEffect(() => {
-
     const token = sessionStorage.getItem('entity_token')
     if (!token) {
       push('/')
     }
     async function getData() {
       try {
-        const playersResponse = await fetch(`https://7C688.playfabapi.com/Admin/GetPlayersInSegment`, {
+        const playersResponse = await fetch(`https://${titleId}.playfabapi.com/Admin/GetPlayersInSegment`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -42,12 +50,13 @@ const Admin = () => {
         setPlayers(sortedPlayers);
 
       } catch (error) {
-        // console.error('Error fetching player data:', error);
+        console.error('Error fetching player data:', error);
       }
     }
     getData();
-    
   }, []);
+
+  // console.log(players);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -90,15 +99,67 @@ const Admin = () => {
     setCurrentPage(page);
   };
 
+
+  //Adding Points
+  const handleAddPoint = async (playerId) => {
+    try {
+      const response = await fetch(`https://${titleId}.playfabapi.com/Server/UpdatePlayerStatistics`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-SecretKey': secretKey,
+        },
+        body: JSON.stringify({
+          PlayFabId: playerId, // Replace with the actual PlayFab ID of the player
+          Statistics: [
+            {
+              StatisticName: 'Point',
+              Value: parseInt(inputValue), // Replace with the amount of points to add
+            },
+          ],
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update player statistics');
+      }
+
+      const data = await response.json();
+      console.log('Player statistics update result:', data);
+
+      // Refresh the player data after updating the statistics
+      const playersResponse = await fetch(`https://${titleId}.playfabapi.com/Admin/GetPlayersInSegment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-SecretKey': secretKey,
+        },
+        body: JSON.stringify({ SegmentId: segmentId }),
+      });
+
+      if (!playersResponse.ok) {
+        const errorData = await playersResponse.json();
+        throw new Error(errorData.errorMessage);
+      }
+
+      const playersInSegment = await playersResponse.json();
+      const sortedPlayers = playersInSegment.data.PlayerProfiles.sort((a, b) => new Date(b.Created).getTime() - new Date(a.Created).getTime());
+      setPlayers(sortedPlayers);
+
+    } catch (error) {
+      console.error('Error updating player statistics:', error);
+    }
+  };
+
   return (
     <section id="pricing" className="relative z-10 py-16 md:py-20 lg:py-28">
       <div className="container">
         <div className="w-full">
           <div className="grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-1 lg:grid-cols-1">
             <div className="flex items-start space-x-4">
-              <button className="shadow-submit dark:shadow-submit-dark flex items-center justify-start rounded-sm bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90">Point</button>
-              <button className="shadow-submit dark:shadow-submit-dark flex items-center justify-start rounded-sm bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90">Notice Board Bet</button>
-              <button className="shadow-submit dark:shadow-submit-dark flex items-center justify-start rounded-sm bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90">Logs</button>
+              <button className="shadow-submit dark:shadow-submit-dark flex items-center justify-start rounded-sm bg-primary px-3 py-2 text-sm font-medium text-white duration-100 hover:bg-primary/90 mr-2">Point</button>
+              <button className="shadow-submit dark:shadow-submit-dark flex items-center justify-start rounded-sm bg-primary px-3 py-2 text-sm font-medium text-white duration-100 hover:bg-primary/90 mr-2">Notice Board Bet</button>
+              <button className="shadow-submit dark:shadow-submit-dark flex items-center justify-start rounded-sm bg-primary px-3 py-2 text-sm font-medium text-white duration-100 hover:bg-primary/90 mr-2">Logs</button>
             </div>
 
             <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
@@ -144,49 +205,25 @@ const Admin = () => {
                         <td className="px-4 py-3">{user.LinkedAccounts[0].Username}</td>
                         <td className="px-4 py-3">{user.LinkedAccounts[0].Email}</td>
                         <td className="px-4 py-3"> {new Date(user.Created).toISOString().split('T')[0]}</td>
+                        <td className="px-4 py-3">{user.Statistics.Point || 0}</td>
                         <td className="px-4 py-3">
                           <input
                             type="number"
                             className="dark:bg-gray-800 px-4 py-2"
                             style={{ width: '120px' }}
-                            value={user.Points}
-                            onChange={(e) => handlePointsChange(e, index)} // Pass index to identify the user
+                            value={inputValue}
+                            onChange={handleInputChange}
                           />
                         </td>
                         <td className="px-4 py-3 flex items-center justify-end">
-                          {/* Actions button */}
+
                           <button
-                            id={`user-actions-dropdown-button-${user.No}`}
-                            data-dropdown-toggle={`user-actions-dropdown-${user.No}`}
-                            className="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
+                            onClick={() => handleAddPoint(user.PlayerId)}
+                            className="shadow-submit dark:shadow-submit-dark flex items-center justify-start rounded-sm bg-primary px-3 py-2 text-sm font-medium text-white duration-100 hover:bg-primary/90 mr-2"
                             type="button"
                           >
-                            <svg
-                              className="w-5 h-5"
-                              aria-hidden="true"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              {/* ... (actions icon) ... */}
-                            </svg>
+                            Point Add
                           </button>
-                          <div
-                            id={`user-actions-dropdown-${user.No}`}
-                            className="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
-                          >
-                            <ul className="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby={`user-actions-dropdown-button-${user.No}`}>
-                              <li>
-                                <a href="#" className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Show</a>
-                              </li>
-                              <li>
-                                <a href="#" className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
-                              </li>
-                            </ul>
-                            <div className="py-1">
-                              <a href="#" className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
-                            </div>
-                          </div>
                         </td>
                       </tr>
                     ))}
@@ -195,12 +232,14 @@ const Admin = () => {
               </div>
               <nav className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
                 <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                  Showing
-                  <span className="font-semibold text-gray-900 dark:text-white">
+                  Showing{' '}
+                  <span className="font-semibold text-gray-900 dark:text-white" style={{ marginRight: '5px' }}>
                     {indexOfFirstItem + 1}-{indexOfLastItem > players.length ? players.length : indexOfLastItem}
                   </span>
-                  of
-                  <span className="font-semibold text-gray-900 dark:text-white">{players.length}</span>
+                  {' '}of{' '}
+                  <span className="font-semibold text-gray-900 dark:text-white" style={{ marginRight: '5px' }}>
+                    {players.length}
+                  </span>
                 </span>
                 <ul className="inline-flex items-stretch -space-x-px">
                   <li>
@@ -234,10 +273,6 @@ const Admin = () => {
                   </li>
                 </ul>
               </nav>
-            </div>
-            <div className="flex justify-end items-center mt-4 space-x-4">
-              <button className="shadow-submit dark:shadow-submit-dark flex items-center justify-start rounded-sm bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90">Add Point</button>
-              <button className="shadow-submit dark:shadow-submit-dark flex items-center justify-start rounded-sm bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90">Remove Point</button>
             </div>
           </div>
         </div>

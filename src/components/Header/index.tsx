@@ -8,13 +8,54 @@ import menuData from "./menuData";
 import { useRouter } from 'next/navigation';
 
 const Header = () => {
+  const secretKey = process.env.NEXT_PUBLIC_PlayFab_Secret_Keys;
+  const segmentId = process.env.NEXT_PUBLIC_PlayFab_Segments;
+  const titleId = process.env.NEXT_PUBLIC_PlayFab_Title_ID;
+  const [players, setPlayers] = useState([]);
+
   let username = '';
   let point = '';
 
   if (typeof window !== 'undefined') {
     username = sessionStorage.getItem('user_name');
-    point = sessionStorage.getItem('user_point');
   }
+
+  useEffect(() => {
+    async function getplayerinfo() {
+      try {
+        const playersResponse = await fetch(`https://${titleId}.playfabapi.com/Admin/GetPlayersInSegment`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-SecretKey': secretKey,
+          },
+          body: JSON.stringify({ SegmentId: segmentId }),
+        });
+
+        if (!playersResponse.ok) {
+          const errorData = await playersResponse.json();
+          throw new Error(errorData.errorMessage);
+        }
+
+        const playersInSegment = await playersResponse.json();
+        setPlayers(playersInSegment.data.PlayerProfiles);
+
+      } catch (error) {
+        console.error('Error fetching player data:', error);
+      }
+    }
+    getplayerinfo();
+  }, []);
+
+  players.forEach(player => {
+    if (player.LinkedAccounts[0].Username === username) {
+      point = player.Statistics.Point;
+      if (player.Statistics.Point === undefined) {
+        point = '0'; // Set point to 0 if it is null
+      }
+    }
+  }
+  );
 
   const router = useRouter();
   // Navbar toggle
@@ -116,8 +157,8 @@ const Header = () => {
                 >
                   <ul className="block lg:flex lg:space-x-12">
                     {menuData.map((menuItem, index) => (
-                      <li key={index} className="group relative">                        
-                        {menuItem.path ? (                          
+                      <li key={index} className="group relative">
+                        {menuItem.path ? (
                           <Link
                             href={menuItem.path}
                             className={`flex py-2 text-base lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 ${usePathName === menuItem.path
@@ -125,7 +166,7 @@ const Header = () => {
                               : "text-dark hover:text-primary dark:text-white/70 dark:hover:text-white"
                               }`}
                           >
-                             {!entityToken && (index === 1 || index === 2) ? null : menuItem.title}                             
+                            {(!entityToken && (index === 1 || index === 2) ? null : menuItem.title) && ((username != process.env.NEXT_PUBLIC_Administrator) && index === 2 ? null : menuItem.title)}                            
                           </Link>
                         ) : (
                           <>
@@ -185,7 +226,7 @@ const Header = () => {
                         }}
                       >
                         Logout
-                      </Link>   
+                      </Link>
                     </>
                   ) : (
                     <>

@@ -15,7 +15,7 @@ const Game = () => {
     <div >
     <iframe
       title=" "
-      src="https://i.simmer.io/@Tobby340602/ninjado"
+      src="https://i.simmer.io/@Tobby340602/ninjastake"
       style={{ width: "100%", height: "1000px" }}>
     </iframe>
   </div>
