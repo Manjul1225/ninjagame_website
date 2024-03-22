@@ -166,7 +166,7 @@ const Header = () => {
                               : "text-dark hover:text-primary dark:text-white/70 dark:hover:text-white"
                               }`}
                           >
-                            {(!entityToken && (index === 1 || index === 2) ? null : menuItem.title) && ((username != process.env.NEXT_PUBLIC_Administrator1 || username != process.env.NEXT_PUBLIC_Administrator2) && index === 2 ? null : menuItem.title)}                            
+                            {(!entityToken && (index === 1 || index === 2) ? null : menuItem.title) && ((username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2) && index === 2 ? null : menuItem.title)}                            
                           </Link>
                         ) : (
                           <>
