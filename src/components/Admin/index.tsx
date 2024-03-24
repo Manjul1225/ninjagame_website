@@ -99,7 +99,6 @@ const Admin = () => {
     setCurrentPage(page);
   };
 
-
   //Adding Points
   const handleAddPoint = async (playerId) => {
     try {

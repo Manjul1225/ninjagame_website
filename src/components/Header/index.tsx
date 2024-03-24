@@ -1,14 +1,17 @@
 "use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ThemeToggler from "./ThemeToggler";
 import menuData from "./menuData";
-import { useRouter } from 'next/navigation';
 import PlayerPoint from "./PlayerPoint";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHouse } from '@fortawesome/free-solid-svg-icons'; // Import the faHouse icon
 
 const Header = () => {
+  const usePathName = usePathname();
   let username
 
   if (typeof window !== 'undefined') {
@@ -51,10 +54,12 @@ const Header = () => {
     }
   };
 
-  const usePathName = usePathname();
+  const handleReturnButton = () => {
+    router.push('/');
+  };  
 
   return (
-    usePathName !== "/game" && (
+    usePathName !== "/game" ? (
       <header
         className={`header left-0 top-0 z-40 flex w-full items-center ${sticky
           ? "dark:bg-gray-dark dark:shadow-sticky-dark fixed z-[9999] bg-white !bg-opacity-80 shadow-sticky backdrop-blur-sm transition"
@@ -208,6 +213,10 @@ const Header = () => {
           </div>
         </div>
       </header>
+    ) : (
+      <button className="fixed top-[10px] left-[50px]" onClick={handleReturnButton}>
+        <FontAwesomeIcon icon={faHouse} />
+      </button>
     )
   );
 };
