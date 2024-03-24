@@ -1,7 +1,9 @@
-"use client";
+"use client"
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const Admin = () => {
@@ -122,6 +124,9 @@ const Admin = () => {
       if (!response.ok) {
         throw new Error('Failed to update player statistics');
       }
+      else {
+        toast.success("Successfully added points!");
+      }
 
       const data = await response.json();
       // console.log('Player statistics update result:', data);
@@ -151,7 +156,8 @@ const Admin = () => {
   };
 
   return (
-    <section id="pricing" className="relative z-10 py-16 md:py-20 lg:py-28">
+    // <section id="pricing" className="relative z-10 py-16 md:py-20 lg:py-28">
+    <section id="pricing" className="my-[100px]">
       <div className="container">
         <div className="w-full">
           <div className="grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-1 lg:grid-cols-1">
@@ -161,7 +167,7 @@ const Admin = () => {
               <button className="shadow-submit dark:shadow-submit-dark flex items-center justify-start rounded-sm bg-primary px-3 py-2 text-sm font-medium text-white duration-100 hover:bg-primary/90 mr-2">Logs</button>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden min-h-[350px]">
               <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                 <div className="w-full md:w-1/2">
                   <form className="flex items-center" onChange={performSearch}>
@@ -215,7 +221,6 @@ const Admin = () => {
                           />
                         </td>
                         <td className="px-4 py-3 flex items-center justify-end">
-
                           <button
                             onClick={() => handleAddPoint(user.PlayerId)}
                             className="shadow-submit dark:shadow-submit-dark flex items-center justify-start rounded-sm bg-primary px-3 py-2 text-sm font-medium text-white duration-100 hover:bg-primary/90 mr-2"
@@ -229,6 +234,7 @@ const Admin = () => {
                   </tbody>
                 </table>
               </div>
+              <ToastContainer />
               <nav className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
                 <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
                   Showing{' '}

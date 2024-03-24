@@ -11,7 +11,7 @@ const Hero = () => {
     <>
       <section
         id="home"
-        className="relative z-10 overflow-hidden bg-white pb-16 pt-[120px] dark:bg-gray-dark md:pb-[120px] md:pt-[150px] xl:pb-[0px] xl:pt-[180px] 2xl:pb-[0px] 2xl:pt-[100px]"
+        className="relative z-10 overflow-hidden bg-white dark:bg-gray-dark my-[100px]"
         style={{pointerEvents: "none"}}
       >
         <Carousel

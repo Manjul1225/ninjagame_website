@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 const BlogSidebarPage = () => {
   return (
     <>
-      <section className="overflow-hidden pb-[120px] pt-[180px]">
+      <section className="overflow-hidden my-[100px]">
         <div className="container">
           <div className="-mx-4 flex flex-wrap">
             <div className="w-full px-4 lg:w-8/12">
