@@ -6,56 +6,14 @@ import { useEffect, useState } from "react";
 import ThemeToggler from "./ThemeToggler";
 import menuData from "./menuData";
 import { useRouter } from 'next/navigation';
+import PlayerPoint from "./PlayerPoint";
 
 const Header = () => {
-  const secretKey = process.env.NEXT_PUBLIC_PlayFab_Secret_Keys;
-  const segmentId = process.env.NEXT_PUBLIC_PlayFab_Segments;
-  const titleId = process.env.NEXT_PUBLIC_PlayFab_Title_ID;
-  const [players, setPlayers] = useState([]);
-
-  let username = '';
-  let point = '';
+  let username
 
   if (typeof window !== 'undefined') {
     username = sessionStorage.getItem('user_name');
   }
-
-  useEffect(() => {
-    async function getplayerinfo() {
-      try {
-        const playersResponse = await fetch(`https://${titleId}.playfabapi.com/Admin/GetPlayersInSegment`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-SecretKey': secretKey,
-          },
-          body: JSON.stringify({ SegmentId: segmentId }),
-        });
-
-        if (!playersResponse.ok) {
-          const errorData = await playersResponse.json();
-          throw new Error(errorData.errorMessage);
-        }
-
-        const playersInSegment = await playersResponse.json();
-        setPlayers(playersInSegment.data.PlayerProfiles);
-
-      } catch (error) {
-        console.error('Error fetching player data:', error);
-      }
-    }
-    getplayerinfo();
-  }, []);
-
-  players.forEach(player => {
-    if (player.LinkedAccounts[0].Username === username) {
-      point = player.Statistics.Point;
-      if (player.Statistics.Point === undefined) {
-        point = '0'; // Set point to 0 if it is null
-      }
-    }
-  }
-  );
 
   const router = useRouter();
   // Navbar toggle
@@ -96,7 +54,7 @@ const Header = () => {
   const usePathName = usePathname();
 
   return (
-    <>
+    usePathName !== "/game" && (
       <header
         className={`header left-0 top-0 z-40 flex w-full items-center ${sticky
           ? "dark:bg-gray-dark dark:shadow-sticky-dark fixed z-[9999] bg-white !bg-opacity-80 shadow-sticky backdrop-blur-sm transition"
@@ -166,7 +124,7 @@ const Header = () => {
                               : "text-dark hover:text-primary dark:text-white/70 dark:hover:text-white"
                               }`}
                           >
-                            {(!entityToken && (index === 1 || index === 2) ? null : menuItem.title) && ((username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2) && index === 2 ? null : menuItem.title)}                            
+                            {(!entityToken && (index === 1 || index === 2) ? null : menuItem.title) && ((username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2) && index === 2 ? null : menuItem.title)}
                           </Link>
                         ) : (
                           <>
@@ -211,10 +169,7 @@ const Header = () => {
                 {
                   entityToken ? (
                     <>
-                      <p className="flex w-full items-center justify-between px-12">
-                        {username}<br></br>
-                        {point}
-                      </p>
+                      <PlayerPoint username={username} />
                       <Link
                         href="/"
                         className="ease-in-up shadow-btn hover:shadow-btn-hover hidden rounded-sm bg-primary px-8 py-3 text-base font-medium text-white transition duration-300 hover:bg-opacity-90 md:block md:px-9 lg:px-6 xl:px-9"
@@ -253,7 +208,7 @@ const Header = () => {
           </div>
         </div>
       </header>
-    </>
+    )
   );
 };
 

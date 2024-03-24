@@ -125,7 +125,7 @@ const Admin = () => {
       }
 
       const data = await response.json();
-      console.log('Player statistics update result:', data);
+      // console.log('Player statistics update result:', data);
 
       // Refresh the player data after updating the statistics
       const playersResponse = await fetch(`https://${titleId}.playfabapi.com/Admin/GetPlayersInSegment`, {
