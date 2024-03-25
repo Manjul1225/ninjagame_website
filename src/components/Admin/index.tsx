@@ -258,9 +258,8 @@ const Admin = () => {
                             type="number"
                             className="dark:bg-gray-800 px-4 py-2"
                             style={{ width: '120px' }}
-                            value={inputValue}
-                            onChange={(event) => handleInputChange(event, index)}
-                          // onChange={handleInputChange}
+                            value={inputValue}                            
+                            onChange={handleInputChange}
                           />
                         </td>
                         <td className="px-4 py-3 flex items-center justify-end">
