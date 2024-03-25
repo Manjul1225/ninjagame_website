@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { setInterval } from "timers";
 
 const PlayerPoint = ({ username }) => {
@@ -36,7 +36,7 @@ const PlayerPoint = ({ username }) => {
   }
 
   useEffect(() => {
-    const intervalId = setInterval(getplayerinfo, 5000);
+    const intervalId = setInterval(getplayerinfo, 3000);
     return () => clearInterval(intervalId);
   }, [getplayerinfo]);
 

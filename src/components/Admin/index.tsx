@@ -26,36 +26,46 @@ const Admin = () => {
 
   const { push } = useRouter()
 
-  useEffect(() => {
-    const token = sessionStorage.getItem('entity_token')
-    if (!token) {
-      push('/')
-    }
-    async function getData() {
-      try {
-        const playersResponse = await fetch(`https://${titleId}.playfabapi.com/Admin/GetPlayersInSegment`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-SecretKey': secretKey,
-          },
-          body: JSON.stringify({ SegmentId: segmentId }),
-        });
+  const getData = async () => {
+    try {
+      const playersResponse = await fetch(`https://${titleId}.playfabapi.com/Admin/GetPlayersInSegment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-SecretKey': secretKey,
+        },
+        body: JSON.stringify({ SegmentId: segmentId }),
+      });
 
-        if (!playersResponse.ok) {
-          const errorData = await playersResponse.json();
-          throw new Error(errorData.errorMessage);
-        }
-
-        const playersInSegment = await playersResponse.json();
-        const sortedPlayers = playersInSegment.data.PlayerProfiles.sort((a, b) => new Date(b.Created).getTime() - new Date(a.Created).getTime());
-        setPlayers(sortedPlayers);
-
-      } catch (error) {
-        console.error('Error fetching player data:', error);
+      if (!playersResponse.ok) {
+        const errorData = await playersResponse.json();
+        throw new Error(errorData.errorMessage);
       }
+
+      const playersInSegment = await playersResponse.json();
+      const sortedPlayers = playersInSegment.data.PlayerProfiles.sort((a, b) => new Date(b.Created).getTime() - new Date(a.Created).getTime());
+      setPlayers(sortedPlayers);
+
+    } catch (error) {
+      console.error('Error fetching player data:', error);
     }
-    getData();
+  };
+
+  if (typeof window !== 'undefined') {
+    const username = sessionStorage.getItem('user_name');
+    const token = sessionStorage.getItem('entity_token');
+    if (!token) {
+      push('/');
+    }
+    if (username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2)
+      push('/');
+  }
+
+  useEffect(() => {
+    const intervalId = setInterval(getData, 1000); // 3000 milliseconds = 3 seconds
+
+    // Clear the interval when the component is unmounted
+    return () => clearInterval(intervalId);
   }, []);
 
   // console.log(players);
@@ -90,10 +100,19 @@ const Admin = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = dataToDisplay.slice(indexOfFirstItem, indexOfLastItem);
 
+  // Update the handlePointsChange function
   const handlePointsChange = (event, index) => {
     const updatedData = [...dataToDisplay];
     updatedData[index].Points = event.target.value;
-    setSearchResults(updatedData);
+
+    // Update the state based on whether the search term is applied or not
+    if (searchTerm) {
+      const updatedSearchResults = [...searchResults];
+      updatedSearchResults[index].Points = event.target.value;
+      setSearchResults(updatedSearchResults);
+    } else {
+      setPlayers(updatedData);
+    }
   };
 
   // Function to handle page change
@@ -126,6 +145,7 @@ const Admin = () => {
       }
       else {
         toast.success("Successfully added points!");
+        setInputValue('');
       }
 
       const data = await response.json();
@@ -152,6 +172,28 @@ const Admin = () => {
 
     } catch (error) {
       console.error('Error updating player statistics:', error);
+    }
+  };
+
+  //delete player account!
+  const handleDelAcount = async (playerId) => {
+    try {
+      const response = await fetch(`https://${titleId}.playfabapi.com/Admin/DeletePlayer`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-SecretKey': secretKey, // Replace with your PlayFab title secret key
+        },
+        body: JSON.stringify({ PlayFabId: playerId }),
+      });
+
+      if (response.ok) {
+        toast.success("Successfully delete account!");
+      } else {
+        console.error('Failed to delete player account');
+      }
+    } catch (error) {
+      console.error('Error deleting player account:', error);
     }
   };
 
@@ -217,7 +259,8 @@ const Admin = () => {
                             className="dark:bg-gray-800 px-4 py-2"
                             style={{ width: '120px' }}
                             value={inputValue}
-                            onChange={handleInputChange}
+                            onChange={(event) => handleInputChange(event, index)}
+                          // onChange={handleInputChange}
                           />
                         </td>
                         <td className="px-4 py-3 flex items-center justify-end">
@@ -226,7 +269,14 @@ const Admin = () => {
                             className="shadow-submit dark:shadow-submit-dark flex items-center justify-start rounded-sm bg-primary px-3 py-2 text-sm font-medium text-white duration-100 hover:bg-primary/90 mr-2"
                             type="button"
                           >
-                            Point Add
+                            Add Point
+                          </button>
+                          <button
+                            onClick={() => handleDelAcount(user.PlayerId)}
+                            className="shadow-submit dark:shadow-submit-dark flex items-center justify-start rounded-sm bg-primary px-3 py-2 text-sm font-medium text-white duration-100 hover:bg-primary/90 mr-2"
+                            type="button"
+                          >
+                            Del
                           </button>
                         </td>
                       </tr>
