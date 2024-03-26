@@ -121,7 +121,7 @@ const Admin = () => {
   };
 
   //Adding Points
-  const handleAddPoint = async (playerId) => {
+  const handleAddPoint = async (playerId, userpoint) => {
     try {
       const response = await fetch(`https://${titleId}.playfabapi.com/Server/UpdatePlayerStatistics`, {
         method: 'POST',
@@ -134,7 +134,7 @@ const Admin = () => {
           Statistics: [
             {
               StatisticName: 'Point',
-              Value: parseInt(inputValue), // Replace with the amount of points to add
+              Value: parseInt(inputValue) + userpoint, // Replace with the amount of points to add
             },
           ],
         }),
@@ -197,8 +197,7 @@ const Admin = () => {
     }
   };
 
-  return (
-    // <section id="pricing" className="relative z-10 py-16 md:py-20 lg:py-28">
+  return (    
     <section id="pricing" className="my-[100px]">
       <div className="container">
         <div className="w-full">
@@ -264,7 +263,7 @@ const Admin = () => {
                         </td>
                         <td className="px-4 py-3 flex items-center justify-end">
                           <button
-                            onClick={() => handleAddPoint(user.PlayerId)}
+                            onClick={() => handleAddPoint(user.PlayerId, user.Statistics.Point)}
                             className="shadow-submit dark:shadow-submit-dark flex items-center justify-start rounded-sm bg-primary px-3 py-2 text-sm font-medium text-white duration-100 hover:bg-primary/90 mr-2"
                             type="button"
                           >
