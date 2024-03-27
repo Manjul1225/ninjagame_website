@@ -1,12 +1,13 @@
-import Image from "next/image";
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHouse } from '@fortawesome/free-solid-svg-icons'; 
+import Image from "next/image";
+import Link from "next/link";
 import ThemeToggler from "./ThemeToggler";
 import menuData from "./menuData";
 import PlayerPoint from "./PlayerPoint";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse } from '@fortawesome/free-solid-svg-icons'; // Import the faHouse icon
+// Import the faHouse icon
 
 const Header = () => {
   const usePathName = usePathname();
@@ -212,8 +213,8 @@ const Header = () => {
         </div>
       </header>
     ) : (
-      <button className="fixed top-[10px] left-[50px]" onClick={handleReturnButton}>
-        <FontAwesomeIcon icon={faHouse} />
+      <button className="fixed top-[20px] left-[70px]" onClick={handleReturnButton}>
+        <FontAwesomeIcon icon={faHouse} style={{fontSize: "30px"}}/>
       </button>
     )
   );
