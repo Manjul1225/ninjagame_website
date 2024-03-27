@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const LogTable = () => {
   const TABLE_ROWS = [
     {
+      No: 1,
       date: "11:49, 22/3/24",
       account: "Firefly",
       cpoint: "+1000",
@@ -18,6 +19,7 @@ const LogTable = () => {
       img: "https://docs.material-tailwind.com/img/logos/logo-spotify.svg",      
     },
     {
+      No: 2,
       date: "11:40, 22/3/24",
       account: "Cow",
       cpoint: "-10000",
@@ -27,6 +29,7 @@ const LogTable = () => {
       img: "https://docs.material-tailwind.com/img/logos/logo-spotify.svg",      
     },
     {
+      No: 3,
       date: "10:49, 22/3/24",
       account: "Apple",
       cpoint: "+500",
