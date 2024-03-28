@@ -1,11 +1,14 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
 
 const Footer = () => {
+  const usePathName = usePathname();
+
   return (
-    <>
+    usePathName !== "/game" && (
       <footer className="relative z-10 bg-white pt-16 dark:bg-gray-dark md:pt-20 lg:pt-24">
         <div className="container">
           <div className="-mx-4 flex flex-wrap">
@@ -140,14 +143,6 @@ const Footer = () => {
                       Blog
                     </Link>
                   </li>
-                  {/* <li>
-                    <Link
-                      href="/"
-                      className="mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
-                    >
-                      Pricing
-                    </Link>
-                  </li> */}
                 </ul>
               </div>
             </div>
@@ -424,7 +419,7 @@ const Footer = () => {
           </svg>
         </div>
       </footer>
-    </>
+    )
   );
 };
 

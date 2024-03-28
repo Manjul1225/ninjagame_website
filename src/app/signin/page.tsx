@@ -1,29 +1,33 @@
 "use client"
+
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
 
-
 const SigninPage = () => {
-  const router = useRouter();
+  const secretKey = process.env.NEXT_PUBLIC_PlayFab_Secret_Keys;
+  const segmentId = process.env.NEXT_PUBLIC_PlayFab_Segments;
+  const titleId = process.env.NEXT_PUBLIC_PlayFab_Title_ID;
+
+  const [players, setPlayers] = useState([]);
+
   const [username, setusername] = useState('');
-  // const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const router = useRouter();
 
   const handleSignin = async (event) => {
     event.preventDefault();
     try {
-      // const loginResponse = await fetch('https://titleId.playfabapi.com/Client/LoginWithEmailAddress', {
-      const loginResponse = await fetch('https://titleId.playfabapi.com/Client/LoginWithPlayFab', {
+      const loginResponse = await fetch(`https://${titleId}.playfabapi.com/Client/LoginWithPlayFab`, {
         method: 'POST',
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
         },
         body: JSON.stringify({
-          // Email: email,
           Username: username,
           Password: password,
-          TitleId: "68C7C",
+          TitleId: titleId,
           InfoRequestParameters: {
             GetPlayerProfile: true
           }
@@ -37,20 +41,15 @@ const SigninPage = () => {
 
       // Storing relevant data in session
       sessionStorage.setItem("entity_token", json_response.data.EntityToken.EntityToken)
-      sessionStorage.setItem("display_name", json_response.data.InfoResultPayload.PlayerProfile.DisplayName)
-      sessionStorage.setItem("entity_type", json_response.data.EntityToken.Entity.Type)
-      sessionStorage.setItem("entity_id", json_response.data.EntityToken.Entity.Id)
-
 
       // Successful login, redirect to home page         
       router.push('/');
 
       const sessionTicket = json_response.data.SessionTicket;
-      sessionStorage.setItem("sessionTicket", json_response.data.SessionTicket)
-      // console.log("sessionTicket===========>");
-      // console.log(sessionTicket);
 
-      const dataResponse = await fetch('https://68C7C.playfabapi.com/Client/GetAccountInfo', {
+      sessionStorage.setItem("sessionTicket", json_response.data.SessionTicket)
+
+      const dataResponse = await fetch(`https://${titleId}.playfabapi.com/Client/GetAccountInfo`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,50 +59,17 @@ const SigninPage = () => {
       });
 
       const data = await dataResponse.json();
-      // console.log("Usename =============>")
-      // console.log(data);
-      // console.log("UserName = ")
-      // console.log(data.data.AccountInfo.Username)
-      sessionStorage.setItem("user_name", data.data.AccountInfo.Username)
 
-
-      const playFabEndpoint = 'https://68C7C.playfabapi.com/Client/GetUserData';
-
-      // Define the request body
-      const requestBody = {
-        PlayFabId: data.data.AccountInfo.PlayFabId,
-      };
-
-      // Make the API request to retrieve the player's data
-      const response = await fetch(playFabEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Authorization': sessionTicket, // Replace with the client session ticket
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      // Handle the response
-      // console.log("Data ==============>")
-      const point = await response.json();
-      // console.log(point);
-      // console.log("point ==============>")
-      // console.log(point.data.Data.Point);
-      if (point.data.Data.Point != null)
-        sessionStorage.setItem("user_point", point.data.Data.Point.Value);
-      else sessionStorage.setItem("user_point", '0');
-
+      sessionStorage.setItem("user_name", data.data.AccountInfo.Username)      
     }
     catch (error) {
       alert("Username or Password incorrect!")
-      // console.log(error);
     }
   };
 
   return (
     <>
-      <section className="relative z-10 overflow-hidden pb-16 pt-36 md:pb-20 lg:pb-28 lg:pt-[180px]">
+      <section className="relative z-10 overflow-hidden my-[100px]">
         <div className="container">
           <div className="-mx-4 flex flex-wrap">
             <div className="w-full px-4">
@@ -139,15 +105,6 @@ const SigninPage = () => {
                       onChange={e => setusername(e.target.value)}
                       required
                     />
-                    {/* <input
-                    type="email"
-                    name="email"
-                    placeholder="Enter your Email"
-                    className="border-stroke dark:text-body-color-dark dark:shadow-two w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:focus:border-primary dark:focus:shadow-none"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    required
-                  /> */}
                   </div>
                   <div className="mb-8">
                     <label

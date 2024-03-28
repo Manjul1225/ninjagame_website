@@ -1,19 +1,20 @@
-"use client";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHouse } from '@fortawesome/free-solid-svg-icons'; 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
 import ThemeToggler from "./ThemeToggler";
 import menuData from "./menuData";
-import { useRouter } from 'next/navigation';
+import PlayerPoint from "./PlayerPoint";
+// Import the faHouse icon
 
 const Header = () => {
-  let username = '';
-  let point = '';
+  const usePathName = usePathname();
+  let username
 
   if (typeof window !== 'undefined') {
     username = sessionStorage.getItem('user_name');
-    point = sessionStorage.getItem('user_point');
   }
 
   const router = useRouter();
@@ -52,14 +53,16 @@ const Header = () => {
     }
   };
 
-  const usePathName = usePathname();
+  const handleReturnButton = () => {
+    router.push('/');
+  };  
 
   return (
-    <>
+    usePathName !== "/game" ? (
       <header
-        className={`header left-0 top-0 z-40 flex w-full items-center ${sticky
+        className={`header left-0 top-0 flex w-full items-center ${sticky
           ? "dark:bg-gray-dark dark:shadow-sticky-dark fixed z-[9999] bg-white !bg-opacity-80 shadow-sticky backdrop-blur-sm transition"
-          : "absolute bg-transparent"
+          : "absolute bg-transparent"           
           }`}
       >
         <div className="container">
@@ -116,7 +119,7 @@ const Header = () => {
                 >
                   <ul className="block lg:flex lg:space-x-12">
                     {menuData.map((menuItem, index) => (
-                      <li key={index} className="group relative">                        
+                      <li key={index} className="group relative">
                         {menuItem.path ? (
                           <Link
                             href={menuItem.path}
@@ -125,7 +128,7 @@ const Header = () => {
                               : "text-dark hover:text-primary dark:text-white/70 dark:hover:text-white"
                               }`}
                           >
-                             {!entityToken && index === 1 ? null : menuItem.title}
+                            {(!entityToken && (index === 1 || index === 2) ? null : menuItem.title) && ((username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2) && index === 2 ? null : menuItem.title)}
                           </Link>
                         ) : (
                           <>
@@ -170,10 +173,7 @@ const Header = () => {
                 {
                   entityToken ? (
                     <>
-                      <p className="flex w-full items-center justify-between px-12">
-                        {username}<br></br>
-                        {point}
-                      </p>
+                      <PlayerPoint username={username} />
                       <Link
                         href="/"
                         className="ease-in-up shadow-btn hover:shadow-btn-hover hidden rounded-sm bg-primary px-8 py-3 text-base font-medium text-white transition duration-300 hover:bg-opacity-90 md:block md:px-9 lg:px-6 xl:px-9"
@@ -185,7 +185,7 @@ const Header = () => {
                         }}
                       >
                         Logout
-                      </Link>   
+                      </Link>
                     </>
                   ) : (
                     <>
@@ -212,7 +212,11 @@ const Header = () => {
           </div>
         </div>
       </header>
-    </>
+    ) : (
+      <button className="fixed top-[20px] left-[70px]" onClick={handleReturnButton}>
+        <FontAwesomeIcon icon={faHouse} style={{fontSize: "30px"}}/>
+      </button>
+    )
   );
 };
 

@@ -4,18 +4,10 @@ import TagButton from "@/components/Blog/TagButton";
 import NewsLatterBox from "@/components/Contact/NewsLatterBox";
 import Image from "next/image";
 
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Blog Details Page | Free Next.js Template for Startup and SaaS",
-  description: "This is Blog Details Page for Startup Nextjs Template",
-  // other metadata
-};
-
 const BlogSidebarPage = () => {
   return (
     <>
-      <section className="overflow-hidden pb-[120px] pt-[180px]">
+      <section className="overflow-hidden my-[100px]">
         <div className="container">
           <div className="-mx-4 flex flex-wrap">
             <div className="w-full px-4 lg:w-8/12">

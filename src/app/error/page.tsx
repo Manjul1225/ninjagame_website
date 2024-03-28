@@ -1,17 +1,9 @@
 import Link from "next/link";
 
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Error Page | Free Next.js Template for Startup and SaaS",
-  description: "This is Error Page for Startup Nextjs Template",
-  // other metadata
-};
-
 const ErrorPage = () => {
   return (
     <>
-      <section className="relative z-10 pb-16 pt-36 md:pb-20 lg:pb-28 lg:pt-[180px]">
+      <section className="relative z-10 my-[100px]">
         <div className="container">
           <div className="flex flex-wrap -mx-4">
             <div className="w-full px-4">

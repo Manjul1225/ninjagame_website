@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
   images: {
     domains: ["localhost"],
@@ -10,6 +11,7 @@ const nextConfig = {
       },
     ],
   },
+  reactStrictMode: false,
 };
 
 module.exports = nextConfig;

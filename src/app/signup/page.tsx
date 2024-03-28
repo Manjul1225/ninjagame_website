@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRouter } from 'next/navigation';
 
 const SignupPage = () => {
-
+  const titleId = process.env.NEXT_PUBLIC_PlayFab_Title_ID;
   const router = useRouter();
   const [fullname, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -14,13 +14,13 @@ const SignupPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const signupResponse = await fetch('https://titleId.playfabapi.com/Client/RegisterPlayFabUser', {
+      const signupResponse = await fetch(`https://${titleId}.playfabapi.com/Client/RegisterPlayFabUser`, {
         method: 'POST',
         body: JSON.stringify({
           Username: fullname,
           Email: email,
           Password: password,
-          TitleId: "68C7C",
+          TitleId: titleId,
           RequireBothUsernameAndEmail: false,
         }),
         headers: {
@@ -36,16 +36,10 @@ const SignupPage = () => {
 
       router.push('/');
 
-      sessionStorage.setItem("entity_token", json_response.data.EntityToken.EntityToken)
-      sessionStorage.setItem("display_name", json_response.data.UserName)
-      sessionStorage.setItem("entity_type", json_response.data.EntityToken.Entity.Type)
-      sessionStorage.setItem("entity_id", json_response.data.EntityToken.Entity.Id)
+      sessionStorage.setItem("entity_token", json_response.data.EntityToken.EntityToken)      
 
       const sessionTicket = json_response.data.SessionTicket;
-      // console.log("sessionTicket===========>");
-      // console.log(sessionTicket);
-
-      const dataResponse = await fetch('https://68C7C.playfabapi.com/Client/GetAccountInfo', {
+      const dataResponse = await fetch(`https://${titleId}.playfabapi.com/Client/GetAccountInfo`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -53,51 +47,17 @@ const SignupPage = () => {
         },
         body: JSON.stringify(signupResponse),
       });
-
       const data = await dataResponse.json();
-      // console.log("Usename =============>")
-      // console.log(data);
-      // console.log("UserName = ")
-      // console.log(data.data.AccountInfo.Username)
       sessionStorage.setItem("user_name", data.data.AccountInfo.Username)
-
-
-      const playFabEndpoint = 'https://68C7C.playfabapi.com/Client/GetUserData';
-
-      // Define the request body
-      const requestBody = {
-        PlayFabId: data.data.AccountInfo.PlayFabId,
-      };
-
-      // Make the API request to retrieve the player's data
-      const response = await fetch(playFabEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Authorization': sessionTicket, // Replace with the client session ticket
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      // Handle the response
-      // console.log("Data ==============>")
-      const point = await response.json();
-      // console.log(point);
-      // console.log("point ==============>")
-      // console.log(point.data.Data.Point.Value);
-      if (point.data.Data.Point != null)
-        sessionStorage.setItem("user_point", point.data.Data.Point.Value);
-      else sessionStorage.setItem("user_point", '0');
 
       alert("Registered!")
     }
     catch (error) {
-      // console.log(error);
     }
   };
   return (
     <>
-      <section className="relative z-10 overflow-hidden pb-16 pt-36 md:pb-20 lg:pb-28 lg:pt-[180px]">
+      <section className="relative z-10 overflow-hidden my-[100px]">
         <div className="container">
           <div className="-mx-4 flex flex-wrap">
             <div className="w-full px-4">
