@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import axios, { AxiosResponse } from 'axios';
 
 const PointTable = () => {
   const secretKey = process.env.NEXT_PUBLIC_PlayFab_Secret_Keys;
@@ -19,35 +19,43 @@ const PointTable = () => {
   const [players, setPlayers] = useState([]);
 
   //point add by input value
-  const [inputValue, setInputValue] = useState('');
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
+  const [inputValue, setInputValue] = useState({});
+    
+  const handleInputChange = ({target: {name, value}}) => {
+    setInputValue(state => ({...state, [name]: value}));
   };
 
   const { push } = useRouter()
 
   const getData = async () => {
+    const requestParams = {
+      SegmentId: segmentId,
+      MaxBatchSize: 10000,
+      SecondsToLive: 1,
+    };
+
     try {
-      const playersResponse = await fetch(`https://${titleId}.playfabapi.com/Admin/GetPlayersInSegment`, {
-        method: 'POST',
+      const playersResponse = await axios.post(`https://${titleId}.playfabapi.com/Admin/GetPlayersInSegment`, requestParams, {
         headers: {
           'Content-Type': 'application/json',
           'X-SecretKey': secretKey,
         },
-        body: JSON.stringify({ SegmentId: segmentId }),
       });
 
-      if (!playersResponse.ok) {
-        const errorData = await playersResponse.json();
+      if (!playersResponse.data) {
+        const errorData = await playersResponse.data;
+        // console.log("Fetch Failed");
+        
+        // const errorData = await JSON.parse(playersResponse.data);
         throw new Error(errorData.errorMessage);
       }
-
-      const playersInSegment = await playersResponse.json();
-      const sortedPlayers = playersInSegment.data.PlayerProfiles.sort((a, b) => new Date(b.Created).getTime() - new Date(a.Created).getTime());
+      
+      const playersInSegment = await playersResponse.data.data;
+      const sortedPlayers = playersInSegment.PlayerProfiles.sort((a, b) => new Date(b.Created).getTime() - new Date(a.Created).getTime());
       setPlayers(sortedPlayers);
 
     } catch (error) {
-      console.error('Error fetching player data:', error);
+      getData();
     }
   };
 
@@ -61,14 +69,9 @@ const PointTable = () => {
       push('/');
   }
 
-  useEffect(() => {
-    const intervalId = setInterval(getData, 1000); // 3000 milliseconds = 3 seconds
-
-    // Clear the interval when the component is unmounted
-    return () => clearInterval(intervalId);
+  useEffect(()=>{
+    getData();
   }, []);
-
-  // console.log(players);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -99,77 +102,84 @@ const PointTable = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = dataToDisplay.slice(indexOfFirstItem, indexOfLastItem);
-
-  // Update the handlePointsChange function
-  const handlePointsChange = (event, index) => {
-    const updatedData = [...dataToDisplay];
-    updatedData[index].Points = event.target.value;
-
-    // Update the state based on whether the search term is applied or not
-    if (searchTerm) {
-      const updatedSearchResults = [...searchResults];
-      updatedSearchResults[index].Points = event.target.value;
-      setSearchResults(updatedSearchResults);
-    } else {
-      setPlayers(updatedData);
-    }
-  };
-
+  
   // Function to handle page change
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
   //Adding Points
-  const handleAddPoint = async (playerId, userpoint) => {
+  async function handleAddPoint(playerId, currentpoint, username){
     try {
-      const response = await fetch(`https://${titleId}.playfabapi.com/Server/UpdatePlayerStatistics`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-SecretKey': secretKey,
-        },
-        body: JSON.stringify({
-          PlayFabId: playerId, // Replace with the actual PlayFab ID of the player
-          Statistics: [
-            {
-              StatisticName: 'Point',
-              Value: parseInt(inputValue) + userpoint, // Replace with the amount of points to add
-            },
-          ],
-        }),
-      });
+      // Add Point
+      const addPoint = async ()=>{
+        const response = await fetch(`https://${titleId}.playfabapi.com/Server/UpdatePlayerStatistics`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-SecretKey': secretKey,
+          },
+          body: JSON.stringify({
+            PlayFabId: playerId, // Replace with the actual PlayFab ID of the player
+            Statistics: [
+              {
+                StatisticName: 'Point',
+                Value: parseInt(inputValue[playerId]) + parseInt(currentpoint), // Replace with the amount of points to add
+              },
+            ],
+          }),
+        });
 
-      if (!response.ok) {
-        throw new Error('Failed to update player statistics');
-      }
-      else {
-        toast.success("Successfully added points!");
-        setInputValue('');
-      }
-
-      const data = await response.json();
-      // console.log('Player statistics update result:', data);
-
-      // Refresh the player data after updating the statistics
-      const playersResponse = await fetch(`https://${titleId}.playfabapi.com/Admin/GetPlayersInSegment`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-SecretKey': secretKey,
-        },
-        body: JSON.stringify({ SegmentId: segmentId }),
-      });
-
-      if (!playersResponse.ok) {
-        const errorData = await playersResponse.json();
-        throw new Error(errorData.errorMessage);
+        if (!response.ok) {
+          throw new Error('Failed to update player statistics');
+        }
+        else {
+          toast.success("Successfully added points!");
+          getData();
+          setInputValue('');
+        }
       }
 
-      const playersInSegment = await playersResponse.json();
-      const sortedPlayers = playersInSegment.data.PlayerProfiles.sort((a, b) => new Date(b.Created).getTime() - new Date(a.Created).getTime());
-      setPlayers(sortedPlayers);
+      //Refresh the player data after updating the statistics
+      const refreshPlayer= async ()=>{
+        const playersResponse = await fetch(`https://${titleId}.playfabapi.com/Admin/GetPlayersInSegment`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-SecretKey': secretKey,
+          },
+          body: JSON.stringify({ SegmentId: segmentId }),
+        });
 
+        if (!playersResponse.ok) {
+          const errorData = await playersResponse.json();
+          throw new Error(errorData.errorMessage);
+        }
+
+        const playersInSegment = await playersResponse.json();
+        const sortedPlayers = playersInSegment.data.PlayerProfiles.sort((a, b) => new Date(b.Created).getTime() - new Date(a.Created).getTime());
+        setPlayers(sortedPlayers);
+      }
+      
+      // write the logs into mongodb
+      const writeData = async () => {
+        try {
+          await axios.post('/api/logs', {
+            account: username,
+            cpoint: parseInt(inputValue[playerId]),
+            bpoint: parseInt(currentpoint),
+            apoint: parseInt(inputValue[playerId])+parseInt(currentpoint),
+            admin: sessionStorage.getItem("user_name"),
+            img: "https://docs.material-tailwind.com/img/logos/logo-spotify.svg",      
+          });
+        } catch (error) {
+          console.error('Error writing data:', error);
+        }
+      };
+
+      addPoint();
+      refreshPlayer();
+      writeData();
     } catch (error) {
       console.error('Error updating player statistics:', error);
     }
@@ -236,7 +246,7 @@ const PointTable = () => {
           </thead>
           <tbody>
             {currentItems.map((user, index) => (
-              <tr key={user.No} className="border-b dark:border-gray-700">
+              <tr key={index} className="border-b dark:border-gray-700">
                 <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{index + 1 + indexOfFirstItem}</td>
                 <td className="px-4 py-3">{user.LinkedAccounts[0].Username}</td>
                 <td className="px-4 py-3">{user.LinkedAccounts[0].Email}</td>
@@ -247,13 +257,15 @@ const PointTable = () => {
                     type="number"
                     className="dark:bg-gray-800 px-4 py-2"
                     style={{ width: '120px' }}
-                    value={inputValue}
+                    key={user.PlayerId}
+                    name={user.PlayerId}
                     onChange={handleInputChange}
+                    value={inputValue[user.PlayerId] || ''}
                   />
                 </td>
                 <td className="px-4 py-3 flex items-center justify-end">
                   <button
-                    onClick={() => handleAddPoint(user.PlayerId, user.Statistics.Point)}
+                    onClick={() => handleAddPoint(user.PlayerId, user.Statistics.Point || 0, user.LinkedAccounts[0].Username)}
                     className="shadow-submit dark:shadow-submit-dark flex items-center justify-start rounded-sm bg-primary px-3 py-2 text-sm font-medium text-white duration-100 hover:bg-primary/90 mr-2"
                     type="button"
                   >

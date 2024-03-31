@@ -36,9 +36,8 @@ const PlayerPoint = ({ username }) => {
   }
 
   useEffect(() => {
-    const intervalId = setInterval(getplayerinfo, 3000);
-    return () => clearInterval(intervalId);
-  }, [getplayerinfo]);
+    getplayerinfo();
+  }, [])
 
   return (
     <p className="flex w-full items-center justify-between px-12">

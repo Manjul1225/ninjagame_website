@@ -4,46 +4,27 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from "axios";
+import { json } from "stream/consumers";
 
+export default function LogTable() {
+  const [tableData, setTableData] = useState([]);
+  useEffect(()=>{ 
+    const fetchData = async () => {
+      try {
+        let res = await axios.get('/api/logs');
+        setTableData(res.data['logs']); 
+      } catch (error) {
+        console.error('Error writing data:', error);
+      }
+    };
+    fetchData();
+  },[])
 
-const LogTable = () => {
-  const TABLE_ROWS = [
-    {
-      No: 1,
-      date: "11:49, 22/3/24",
-      account: "Firefly",
-      cpoint: "+1000",
-      bpoint: "0",
-      apoint: "1000",
-      admin: "Elss",
-      img: "https://docs.material-tailwind.com/img/logos/logo-spotify.svg",      
-    },
-    {
-      No: 2,
-      date: "11:40, 22/3/24",
-      account: "Cow",
-      cpoint: "-10000",
-      bpoint: "50000",
-      apoint: "40000",
-      admin: "Yirru",
-      img: "https://docs.material-tailwind.com/img/logos/logo-spotify.svg",      
-    },
-    {
-      No: 3,
-      date: "10:49, 22/3/24",
-      account: "Apple",
-      cpoint: "+500",
-      bpoint: "0",
-      apoint: "500",
-      admin: "Elss",
-      img: "https://docs.material-tailwind.com/img/logos/logo-spotify.svg",      
-    },
-  ]
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // Number of items per page
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [players, setPlayers] = useState([]); // Assuming players is the data array
 
   const { push } = useRouter()
 
@@ -58,18 +39,18 @@ const LogTable = () => {
   }
 
   const handleSearchChange = (event) => {
+    event.preventDefault();
     setSearchTerm(event.target.value);
   };
 
   // Function to perform search
-  const performSearch = () => {
-    if (players.length > 0) {
-      const results = players.filter((user) => {
-        const username = user.LinkedAccounts[0]?.Username || '';
-        const email = user.LinkedAccounts[0]?.Email || '';
+  const performSearch = (e) => {
+    e.preventDefault();
+    if (tableData.length > 0) {
+      const results = tableData.filter((user) => {
+        const account = user.account || '';
         return (
-          username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          email.toLowerCase().includes(searchTerm.toLowerCase())
+          account.toLowerCase().includes(searchTerm.toLowerCase())
         );
       });
       setSearchResults(results);
@@ -77,29 +58,17 @@ const LogTable = () => {
   };
 
   // Use searchResults if search term is entered, else use players
-  const dataToDisplay = searchTerm ? searchResults : players;
-
+  const dataToDisplay = searchTerm ? searchResults : tableData;
+  const sortedPlayers = dataToDisplay.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
   // Logic to calculate the total number of pages
-  const totalPages = Math.ceil(dataToDisplay.length / itemsPerPage);
+  const totalPages = Math.ceil(sortedPlayers.length / itemsPerPage);
+  
 
   // Get current items based on the current page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = dataToDisplay.slice(indexOfFirstItem, indexOfLastItem);
-  // Update the handlePointsChange function
-  const handlePointsChange = (event, index) => {
-    const updatedData = [...dataToDisplay];
-    updatedData[index].Points = event.target.value;
-
-    // Update the state based on whether the search term is applied or not
-    if (searchTerm) {
-      const updatedSearchResults = [...searchResults];
-      updatedSearchResults[index].Points = event.target.value;
-      setSearchResults(updatedSearchResults);
-    } else {
-      setPlayers(updatedData);
-    }
-  };
+ 
 
   // Function to handle page change
   const handlePageChange = (page) => {
@@ -144,13 +113,20 @@ const LogTable = () => {
             </tr>
           </thead>
           <tbody>
-            {TABLE_ROWS.map((user, index) => (
-              <tr key={user.No} className="border-b dark:border-gray-700">
+            {currentItems.map((user, index) => (
+              <tr key={index} className="border-b dark:border-gray-700">
                 <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   {index + 1 + indexOfFirstItem}
                 </td>
                 <td className="px-4 py-3">                  
-                  {user.date}
+                  {new Intl.DateTimeFormat('en-US', 
+                  {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    month: '2-digit',
+                    day: '2-digit',
+                    year: 'numeric'
+                  }).format(new Date(user.updatedAt))}
                 </td>
                 <td className="px-4 py-3">
                   {user.account}
@@ -180,11 +156,11 @@ const LogTable = () => {
         <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
           Showing{' '}
           <span className="font-semibold text-gray-900 dark:text-white" style={{ marginRight: '5px' }}>
-            {indexOfFirstItem + 1}-{indexOfLastItem > players.length ? players.length : indexOfLastItem}
+            {indexOfFirstItem + 1}-{indexOfLastItem > tableData.length ? tableData.length : indexOfLastItem}
           </span>
           {' '}of{' '}
           <span className="font-semibold text-gray-900 dark:text-white" style={{ marginRight: '5px' }}>
-            {players.length}
+            {tableData.length}
           </span>
         </span>
         <ul className="inline-flex items-stretch -space-x-px">
@@ -222,5 +198,3 @@ const LogTable = () => {
     </div>
   );
 };
-
-export default LogTable;
