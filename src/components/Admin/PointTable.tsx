@@ -63,10 +63,10 @@ const PointTable = () => {
     const username = sessionStorage.getItem('user_name');
     const token = sessionStorage.getItem('entity_token');
     if (!token) {
-      push('/');
+      push('/signin');
     }
     if (username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2)
-      push('/');
+      push('/signin');
   }
 
   useEffect(()=>{

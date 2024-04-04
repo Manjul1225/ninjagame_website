@@ -57,7 +57,7 @@ const SignupPage = () => {
   };
   return (
     <>
-      <section className="relative z-10 overflow-hidden my-[62px]">
+      <section className="relative z-10 overflow-hidden my-[80px]">
         <div className="container">
           <div className="-mx-4 flex flex-wrap">
             <div className="w-full px-4">

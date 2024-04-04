@@ -1,6 +1,5 @@
 import Admin from "@/components/Admin";
 
-
 const AdminPage = () => {
   return (
     <>

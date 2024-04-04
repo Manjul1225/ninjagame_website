@@ -6,13 +6,12 @@ import Blog from "@/components/Blog";
 import Brands from "@/components/Brands";
 import ScrollUp from "@/components/Common/ScrollUp";
 import Contact from "@/components/Contact";
-import Game from "@/components/Game";
 import Hero from "@/components/Hero";
 import Admin from "@/components/Admin";
 import Testimonials from "@/components/Testimonials";
 import Video from "@/components/Video";
 import { useEffect, useState } from "react";
-
+import Game from "@/components/Game";
 
 export default function Home() {
   const [entityToken, setEntityToken] = useState('');
@@ -23,7 +22,8 @@ export default function Home() {
   }, []);
   return (
     <>
-      <ScrollUp />
+      <Game />
+      {/* <ScrollUp />
       <Hero />
       <Video />
       <Brands />
@@ -31,7 +31,7 @@ export default function Home() {
       <AboutSectionTwo />
       <Testimonials />
       <Blog />
-      <Contact />
+      <Contact /> */}
     </>
   );
 }
