@@ -7,7 +7,7 @@ import Image from "next/image";
 const BlogSidebarPage = () => {
   return (
     <>
-      <section className="overflow-hidden my-[100px]">
+      <section className="overflow-hidden my-[62px]">
         <div className="container">
           <div className="-mx-4 flex flex-wrap">
             <div className="w-full px-4 lg:w-8/12">

@@ -69,7 +69,7 @@ const SigninPage = () => {
 
   return (
     <>
-      <section className="relative z-10 overflow-hidden my-[100px]">
+      <section className="relative z-10 overflow-hidden my-[62px]">
         <div className="container">
           <div className="-mx-4 flex flex-wrap">
             <div className="w-full px-4">

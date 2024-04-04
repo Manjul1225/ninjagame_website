@@ -5,7 +5,7 @@ import Image from "next/image";
 const BlogDetailsPage = () => {
   return (
     <>
-      <section className="my-[100px]">
+      <section className="my-[62px]">
         <div className="container">
           <div className="-mx-4 flex flex-wrap justify-center">
             <div className="w-full px-4 lg:w-8/12">

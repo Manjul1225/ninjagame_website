@@ -4,14 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse } from '@fortawesome/free-solid-svg-icons'; 
 import Image from "next/image";
 import Link from "next/link";
-import ThemeToggler from "./ThemeToggler";
+// import ThemeToggler from "./ThemeToggler";
 import menuData from "./menuData";
 import PlayerPoint from "./PlayerPoint";
-// Import the faHouse icon
 
 const Header = () => {
   const usePathName = usePathname();
-  let username
+  let username = '';
 
   if (typeof window !== 'undefined') {
     username = sessionStorage.getItem('user_name');
@@ -60,53 +59,46 @@ const Header = () => {
   return (
     usePathName !== "/game" ? (
       <header
-        className={`header left-0 top-0 flex w-full items-center ${sticky
-          ? "dark:bg-gray-dark dark:shadow-sticky-dark fixed z-[9999] bg-white !bg-opacity-80 shadow-sticky backdrop-blur-sm transition"
-          : "absolute bg-transparent"           
+        className={`w-full h-[62px] header left-0 top-0 flex items-center bg-[#3F2E4E] ${sticky
+          ? "dark:shadow-sticky-dark fixed z-[9999] !bg-opacity-80 shadow-sticky backdrop-blur-sm transition"
+          : "absolute"           
           }`}
       >
-        <div className="container">
-          <div className="relative -mx-4 flex items-center justify-between">
-            <div className="w-60 max-w-full px-4 xl:mr-12">
+        <div className="mx-4 w-full">
+          <div className="relative flex items-center justify-between">
+            <div className="w-60 max-w-full px-2 xl:mr-12">
               <Link
                 href="/"
-                className={`header-logo block w-full ${sticky ? "py-5 lg:py-2" : "py-8"
+                className={`header-logo block w-full text-[#F4B13E] font-bold ${sticky ? "py-5 lg:py-2" : "py-8"
                   } `}
               >
                 <Image
-                  src="/images/logo/newlogo1.svg"
+                  src="/images/logo/logo.png"
                   alt="logo"
-                  width={140}
+                  width={80}
                   height={30}
-                  className="w-36 h-14 dark:hidden"
-                />
-                <Image
-                  src="/images/logo/newlogo1.svg"
-                  alt="logo"
-                  width={140}
-                  height={30}
-                  className="w-36 h-14 hidden w-full dark:block"
+                  className="w-28 h-8"
                 />
               </Link>
             </div>
-            <div className="flex w-full items-center justify-between px-4">
+            <div className="lg:w-[800px] flex items-center justify-between px-2">
               <div>
                 <button
                   onClick={navbarToggleHandler}
                   id="navbarToggler"
                   aria-label="Mobile Menu"
-                  className="absolute right-4 top-1/2 block translate-y-[-50%] rounded-lg px-3 py-[6px] ring-primary focus:ring-2 lg:hidden"
+                  className="absolute right-4 top-1/2 block translate-y-[-50%] rounded-lg px-3 py-[6px] focus:ring-2 lg:hidden"
                 >
                   <span
-                    className={`relative my-1.5 block h-0.5 w-[30px] bg-black transition-all duration-300 dark:bg-white ${navbarOpen ? " top-[7px] rotate-45" : " "
+                    className={`relative my-1.5 block h-0.5 w-[30px] bg-[#F4B13E] transition-all duration-300 ${navbarOpen ? " top-[7px] rotate-45" : " "
                       }`}
                   />
                   <span
-                    className={`relative my-1.5 block h-0.5 w-[30px] bg-black transition-all duration-300 dark:bg-white ${navbarOpen ? "opacity-0 " : " "
+                    className={`relative my-1.5 block h-0.5 w-[30px] bg-[#F4B13E] transition-all duration-300 ${navbarOpen ? "opacity-0 " : " "
                       }`}
                   />
                   <span
-                    className={`relative my-1.5 block h-0.5 w-[30px] bg-black transition-all duration-300 dark:bg-white ${navbarOpen ? " top-[-8px] -rotate-45" : " "
+                    className={`relative my-1.5 block h-0.5 w-[30px] bg-[#F4B13E] transition-all duration-300 ${navbarOpen ? " top-[-8px] -rotate-45" : " "
                       }`}
                   />
                 </button>
@@ -117,18 +109,19 @@ const Header = () => {
                     : "invisible top-[120%] opacity-0"
                     }`}
                 >
-                  <ul className="block lg:flex lg:space-x-12">
+                  <ul className="block lg:flex">
                     {menuData.map((menuItem, index) => (
-                      <li key={index} className="group relative">
+                      <li key={index} className={`${usePathName === menuItem.path
+                        ? "-skew-x-12 bg-[#F4B13E]": ""} ease-in px-4 py-2 group relative ${(!entityToken && ( index === 1 || index === 2) ? 'hidden' : '') && ((username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2) && index === 1 ? 'hidden' : '')}`}>
                         {menuItem.path ? (
                           <Link
                             href={menuItem.path}
-                            className={`flex py-2 text-base lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 ${usePathName === menuItem.path
-                              ? "text-primary dark:text-white"
-                              : "text-dark hover:text-primary dark:text-white/70 dark:hover:text-white"
+                            className={`ease-linear flex py-2 text-base font-bold lg:mr-0 lg:inline-flex lg:px-0 ${usePathName === menuItem.path
+                              ? "text-[#361802]"
+                              : "text-[#F4B13E] hover:text-white"
                               }`}
                           >
-                            {(!entityToken && (index === 1 || index === 2) ? null : menuItem.title) && ((username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2) && index === 2 ? null : menuItem.title)}
+                            {menuItem.title}
                           </Link>
                         ) : (
                           <>
@@ -176,7 +169,7 @@ const Header = () => {
                       <PlayerPoint username={username} />
                       <Link
                         href="/"
-                        className="ease-in-up shadow-btn hover:shadow-btn-hover hidden rounded-sm bg-primary px-8 py-3 text-base font-medium text-white transition duration-300 hover:bg-opacity-90 md:block md:px-9 lg:px-6 xl:px-9"
+                        className="ease-in-up shadow-btn hover:shadow-btn-hover hidden rounded-sm bg-[#FA9F4E] text-[#3F2E4E] hover:text-white  px-8 py-3 text-base font-bold transition duration-300 hover:bg-opacity-90 md:block md:px-9 lg:px-6 xl:px-9"
                         onClick={() => {
                           sessionStorage.clear();
                           setEntityToken('');
@@ -191,21 +184,21 @@ const Header = () => {
                     <>
                       <Link
                         href="/signin"
-                        className="hidden px-7 py-3 text-base font-medium text-dark hover:opacity-70 dark:text-white md:block"
+                        className="hidden px-4 py-3 text-base text-[#F4B13E] hover:text-white font-bold md:block"
                       >
                         Sign In
                       </Link>
                       <Link
                         href="/signup"
-                        className="ease-in-up shadow-btn hover:shadow-btn-hover hidden rounded-sm bg-primary px-8 py-3 text-base font-medium text-white transition duration-300 hover:bg-opacity-90 md:block md:px-9 lg:px-6 xl:px-9"
+                        className="hidden md:block rounded-lg bg-[#FA9F4E] font-bold px-4 py-3 text-base text-[#3F2E4E] hover:text-white transition duration-300 hover:bg-opacity-90"
                       >
-                        Sign Up
+                        Register
                       </Link>
                     </>
                   )
                 }
                 <div>
-                  <ThemeToggler />
+                  {/* <ThemeToggler /> */}
                 </div>
               </div>
             </div>

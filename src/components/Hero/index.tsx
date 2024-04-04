@@ -2,19 +2,32 @@
 
 import React from "react"
 import Link from "next/link";
-import { Carousel } from 'react-responsive-carousel';
+// import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import Image from "next/image";
+import { url } from "inspector";
 
 const Hero = () => {
   return (
     <>
-      <section
+      <div
         id="home"
-        className="relative z-10 overflow-hidden bg-white dark:bg-gray-dark my-[100px]"
-        style={{pointerEvents: "none"}}
+        className="relative z-10 overflow-hidden bg-white dark:bg-gray-dark my-[62px]"
+        style={{
+          pointerEvents: "none", 
+          background:`url("/images/hero/Background.jpg")`,
+          backgroundSize: "100% 100%",
+          backgroundRepeat: "no-repeat",
+        }}
       >
-        <Carousel
+        <Image
+            src="/images/hero/NinjaText.svg"
+            alt="Text_Ninja"
+            width={700}
+            height={200}
+            className="z-10 p-10"
+          />
+        {/* <Carousel
           interval={4000}
           autoPlay
           infiniteLoop
@@ -279,8 +292,8 @@ const Hero = () => {
               </radialGradient>
             </defs>
           </svg>
-        </div>
-      </section>
+        </div> */}
+      </div>
     </>
   );
 };

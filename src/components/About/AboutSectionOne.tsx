@@ -17,7 +17,7 @@ const AboutSectionOne = () => {
   );
 
   return (
-    <section id="about" className="my-[100px]">
+    <section id="about" className="my-[62px]">
       <div className="container">
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4">

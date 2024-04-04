@@ -140,7 +140,7 @@ const PointTable = () => {
         }
       }
 
-      //Refresh the player data after updating the statistics
+      // Refresh the player data after updating the statistics
       const refreshPlayer= async ()=>{
         const playersResponse = await fetch(`https://${titleId}.playfabapi.com/Admin/GetPlayersInSegment`, {
           method: 'POST',
