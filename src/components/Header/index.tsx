@@ -112,7 +112,7 @@ const Header = () => {
                   <ul className="block lg:flex">
                     {menuData.map((menuItem, index) => (
                       <li key={index} className={`${usePathName === menuItem.path
-                        ? "-skew-x-12 bg-[#F4B13E]": ""} ease-in px-4 py-2 group relative ${(!entityToken && ( index === 1 || index === 2) ? 'hidden' : '') && ((username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2) && index === 1 ? 'hidden' : '')}`}>
+                        ? "-skew-x-12 bg-[#F4B13E]": ""} ease-in px-4 py-2 group relative ${(!entityToken && ( index === 1 || index === 2) ? 'hidden' : '') } ${((username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2) && index === 1 ? 'hidden' : '')}`}>
                         {menuItem.path ? (
                           <Link
                             href={menuItem.path}

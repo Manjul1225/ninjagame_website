@@ -40,7 +40,7 @@ const PlayerPoint = ({ username }) => {
   }, [])
 
   return (
-    <p className="flex w-full items-center justify-between px-12">
+    <p className="flex w-full items-center justify-between px-12 text-center text-[#F4B13E]">
       {username}<br></br>
       {point}
     </p>
