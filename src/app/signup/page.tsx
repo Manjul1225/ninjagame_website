@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignupPage = () => {
   const titleId = process.env.NEXT_PUBLIC_PlayFab_Title_ID;
@@ -30,7 +32,8 @@ const SignupPage = () => {
       var json_response = await signupResponse.json();
 
       if (!signupResponse.ok) {
-        alert(json_response.errorMessage)
+        toast.error(json_response.errorMessage);
+        // alert(json_response.errorMessage)
         throw new Error(json_response.errorMessage)
       }
 
@@ -49,8 +52,8 @@ const SignupPage = () => {
       });
       const data = await dataResponse.json();
       sessionStorage.setItem("user_name", data.data.AccountInfo.Username)
-
-      alert("Registered!")
+      toast.success("Registered!");
+      // alert("Registered!")
     }
     catch (error) {
     }
@@ -248,6 +251,7 @@ const SignupPage = () => {
             </defs>
           </svg>
         </div>
+        <ToastContainer />
       </section>
     </>
   );

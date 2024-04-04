@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SigninPage = () => {
   const secretKey = process.env.NEXT_PUBLIC_PlayFab_Secret_Keys;
@@ -59,11 +61,11 @@ const SigninPage = () => {
       });
 
       const data = await dataResponse.json();
-
       sessionStorage.setItem("user_name", data.data.AccountInfo.Username)      
     }
     catch (error) {
-      alert("Username or Password incorrect!")
+      toast.error("Username or Password incorrect!");
+      // alert("Username or Password incorrect!")
     }
   };
 
@@ -239,6 +241,7 @@ const SigninPage = () => {
             </defs>
           </svg>
         </div>
+        <ToastContainer />
       </section>
     </>
   );
