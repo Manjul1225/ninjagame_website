@@ -70,16 +70,10 @@ const Header = () => {
             <div className="w-60 max-w-full px-2 xl:mr-12">
               <Link
                 href="/"
-                className={`header-logo block w-full text-[#F4B13E] font-bold ${sticky ? "py-5 lg:py-2" : "py-8"
+                className={`header-logo block w-full text-[#F4B13E] text-[30px] ${sticky ? "py-5 lg:py-2" : "py-8"
                   } `}
               >
-                <Image
-                  src="/images/logo/logo.png"
-                  alt="logo"
-                  width={80}
-                  height={30}
-                  className="w-28 h-8"
-                />
+                <p>NINJA STAKE</p>
               </Link>
             </div>
             <div className="lg:w-[800px] flex items-center justify-between px-2">

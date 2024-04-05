@@ -31,3 +31,14 @@
     @apply opacity-100;
   }
 }
+
+@font-face {
+  font-family: 'NightinTokyo';
+  src: url('/fonts/night-in-tokyo/NightinTokyo.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+.header-logo{
+  font-family: 'NightinTokyo', sans-serif;
+}
