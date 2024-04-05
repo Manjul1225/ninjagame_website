@@ -5,7 +5,7 @@ import Breadcrumb from "@/components/Common/Breadcrumb";
 const AboutPage = () => {
   return (
     <>
-      <div className="h-lvh align-middle justify-center flex flex-col w-full text-center ">
+      <div className="h-lvh align-middle justify-center flex flex-col w-full text-center">
         <p className="text-[#F4B13E] text-[24px]">
           For support, or any bug reporting, please join our discord and reach out to us. 
         </p>
