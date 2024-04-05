@@ -83,32 +83,53 @@ const Header = () => {
               </Link>
             </div>
             <div className="lg:w-[800px] flex items-center justify-between px-2">
-              <nav
-                id="navbarCollapse"
-                className={`navbar absolute right-0 z-30 w-[250px] rounded border-[.5px] border-body-color/50 bg-white px-6 py-4 duration-300 dark:border-body-color/20 dark:bg-dark lg:visible lg:static lg:w-auto lg:border-none lg:!bg-transparent lg:p-0 lg:opacity-100 ${navbarOpen
-                  ? "visibility top-full opacity-100"
-                  : "invisible top-[120%] opacity-0"
-                  }`}
-              >
-                <ul className="block lg:flex">
-                  {menuData.map((menuItem, index) => (
-                    <li key={index} className={`${usePathName === menuItem.path
-                      ? "lg:-skew-x-12 lg:bg-[#F4B13E]": ""} ease-in px-4 py-2 group relative ${(!entityToken && ( index === 1) ? 'hidden' : '') } ${((username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2) && index === 1 ? 'hidden' : '')}`}>
-                      {
-                        <Link
-                          href={menuItem.path}
-                          className={`ease-linear flex py-2 text-base font-bold lg:mr-0 lg:inline-flex lg:px-0 text-[#F4B13E] hover:text-white ${usePathName === menuItem.path
-                            ? "lg:text-[#361802]"
-                            : ""
-                            }`}
-                        >
-                          {menuItem.title}
-                        </Link>
-                      }
-                    </li>
-                  ))}
-                </ul>
-              </nav>
+              <div>
+                <button
+                  onClick={navbarToggleHandler}
+                  id="navbarToggler"
+                  aria-label="Mobile Menu"
+                  className="absolute right-4 top-1/2 block translate-y-[-50%] rounded-lg px-3 py-[6px] focus:ring-2 lg:hidden"
+                >
+                  <span
+                    className={`relative my-1.5 block h-0.5 w-[30px] bg-[#F4B13E] transition-all duration-300 ${navbarOpen ? " top-[7px] rotate-45" : " "
+                      }`}
+                  />
+                  <span
+                    className={`relative my-1.5 block h-0.5 w-[30px] bg-[#F4B13E] transition-all duration-300 ${navbarOpen ? "opacity-0 " : " "
+                      }`}
+                  />
+                  <span
+                    className={`relative my-1.5 block h-0.5 w-[30px] bg-[#F4B13E] transition-all duration-300 ${navbarOpen ? " top-[-8px] -rotate-45" : " "
+                      }`}
+                  />  
+                </button>
+                <nav
+                  id="navbarCollapse"
+                  className={`navbar absolute right-0 z-30 w-[250px] rounded border-[.5px] border-body-color/50 bg-white px-6 py-4 duration-300 dark:border-body-color/20 dark:bg-dark lg:visible lg:static lg:w-auto lg:border-none lg:!bg-transparent lg:p-0 lg:opacity-100 ${navbarOpen
+                    ? "visibility top-full opacity-100"
+                    : "invisible top-[120%] opacity-0"
+                    }`}
+                >
+                  <ul className="block lg:flex">
+                    {menuData.map((menuItem, index) => (
+                      <li key={index} className={`${usePathName === menuItem.path
+                        ? "lg:-skew-x-12 lg:bg-[#F4B13E]": ""} ease-in px-4 py-2 group relative ${(!entityToken && ( index === 1) ? 'hidden' : '') } ${((username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2) && index === 1 ? 'hidden' : '')}`}>
+                        {
+                          <Link
+                            href={menuItem.path}
+                            className={`ease-linear flex py-2 text-base font-bold lg:mr-0 lg:inline-flex lg:px-0 text-[#F4B13E] hover:text-white ${usePathName === menuItem.path
+                              ? "lg:text-[#361802]"
+                              : ""
+                              }`}
+                          >
+                            {menuItem.title}
+                          </Link>
+                        }
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              </div>
               <div className="flex items-center justify-end pr-16 lg:pr-0">
                 {
                   entityToken ? (
@@ -118,7 +139,7 @@ const Header = () => {
                       </button>
                       <UserProfile />
                       <PlayerPoint username={username} />
-                      <Link
+                      {/* <Link
                         href="/"
                         className="ease-in-up shadow-btn hover:shadow-btn-hover hidden rounded-sm bg-[#FA9F4E] text-[#3F2E4E] hover:text-white  px-8 py-3 text-base font-bold transition duration-300 hover:bg-opacity-90 md:block md:px-9 lg:px-6 xl:px-9"
                         onClick={() => {
@@ -128,7 +149,7 @@ const Header = () => {
                         }}
                       >
                         Logout
-                      </Link>
+                      </Link> */}
                     </>
                   ) : (
                     <>
@@ -138,12 +159,12 @@ const Header = () => {
                       >
                         Sign In
                       </Link>
-                      <Link
+                      {/* <Link
                         href="/signup"
                         className="hidden md:block rounded-lg bg-[#FA9F4E] font-bold px-4 py-3 text-base text-[#3F2E4E] hover:text-white transition duration-300 hover:bg-opacity-90"
                       >
                         Register
-                      </Link>
+                      </Link> */}
                     </>
                   )
                 }

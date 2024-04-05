@@ -16,6 +16,9 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning lang="en">
+      <head>
+        <title>Ninja Studios</title>
+      </head>
       <body className={`bg-[#FCFCFC] dark:bg-black `}>
         <Providers>
           <Header />
