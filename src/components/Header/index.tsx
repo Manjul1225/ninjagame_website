@@ -9,7 +9,7 @@ import menuData from "./menuData";
 import PlayerPoint from "./PlayerPoint";
 import UserProfile from "./UserProfile";
 
-const Header = () => {
+const Header = ({setLoading}) => {
   const usePathName = usePathname();
   let username = '';
 
@@ -60,7 +60,7 @@ const Header = () => {
   return (
     usePathName !== "/game" ? (
       <header
-        className={`w-full h-[62px] header left-0 top-0 flex items-center bg-[#3F2E4E] ${sticky
+        className={`w-full border-b-2 border-[#F4B13E] h-[62px] header left-0 z-10 top-0 flex items-center bg-[#3F2E4E] ${sticky
           ? "dark:shadow-sticky-dark fixed z-[9999] !bg-opacity-80 shadow-sticky backdrop-blur-sm transition"
           : "absolute"           
           }`}
@@ -107,12 +107,12 @@ const Header = () => {
                   <ul className="block lg:flex">
                     {menuData.map((menuItem, index) => (
                       <li key={index} className={`${usePathName === menuItem.path
-                        ? "lg:-skew-x-12 lg:bg-[#F4B13E]": ""} ease-in px-4 py-2 group relative ${(!entityToken && ( index === 1) ? 'hidden' : '') } ${((username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2) && index === 1 ? 'hidden' : '')}`}>
+                        ? "lg:-skew-x-[20deg] lg:bg-[#F4B13E]": ""} transition-opacity px-4 py-2 group relative ${(!entityToken && ( index === 1) ? 'hidden' : '') } ${((username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2) && index === 1 ? 'hidden' : '')}`}>
                         {
                           <Link
                             href={menuItem.path}
-                            className={`ease-linear flex py-2 text-base font-bold lg:mr-0 lg:inline-flex lg:px-0 text-[#F4B13E] hover:text-white ${usePathName === menuItem.path
-                              ? "lg:text-[#361802]"
+                            className={`flex py-2 text-base font-bold lg:mr-0 lg:inline-flex lg:px-0 text-[#F4B13E] hover:text-white ${usePathName === menuItem.path
+                              ? "lg:text-[#361802] lg:skew-x-[20deg]"
                               : ""
                               }`}
                           >
@@ -132,7 +132,7 @@ const Header = () => {
                         <Image alt="" src="images/svgs/cart.svg" width={40} height={40}/>
                       </button>
                       <UserProfile />
-                      <PlayerPoint username={username} />
+                      <PlayerPoint username={username} setLoading={setLoading} />
                       {/* <Link
                         href="/"
                         className="ease-in-up shadow-btn hover:shadow-btn-hover hidden rounded-sm bg-[#FA9F4E] text-[#3F2E4E] hover:text-white  px-8 py-3 text-base font-bold transition duration-300 hover:bg-opacity-90 md:block md:px-9 lg:px-6 xl:px-9"

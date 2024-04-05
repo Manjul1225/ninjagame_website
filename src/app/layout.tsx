@@ -6,6 +6,9 @@ import ScrollToTop from "@/components/ScrollToTop";
 import { Inter } from "next/font/google";
 import "node_modules/react-modal-video/css/modal-video.css";
 import "../styles/index.css";
+import Spinner from "@/components/Spinner/spinner";
+import { Providers } from "./providers";
+import { useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,6 +17,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const [loading, setLoading] = useState(true)
   return (
     <html suppressHydrationWarning lang="en">
       <head>
@@ -21,7 +25,8 @@ export default function RootLayout({
       </head>
       <body className={`bg-[#FCFCFC] dark:bg-black `}>
         <Providers>
-          <Header />
+          {loading && <Spinner/>}
+          <Header setLoading={setLoading}/>
           {children}
           {/* <Footer /> */}
           {/* <ScrollToTop /> */}
@@ -31,4 +36,5 @@ export default function RootLayout({
   );
 }
 
-import { Providers } from "./providers";
+
+

@@ -1,5 +1,4 @@
 "use client"
-
 import AboutSectionOne from "@/components/About/AboutSectionOne";
 import AboutSectionTwo from "@/components/About/AboutSectionTwo";
 import Blog from "@/components/Blog";
@@ -12,9 +11,13 @@ import Testimonials from "@/components/Testimonials";
 import Video from "@/components/Video";
 import { useEffect, useState } from "react";
 import Game from "@/components/Game";
+import { useRouter } from "next/navigation";
+import Spinner from "@/components/Spinner/spinner";
 
 export default function Home() {
+  const router = useRouter();
   const [entityToken, setEntityToken] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const token = sessionStorage.getItem('entity_token')
@@ -22,7 +25,10 @@ export default function Home() {
   }, []);
   return (
     <>
-      <Game />
+      <div className="w-full h-full absolute">
+        <Hero/>
+      </div>  
+      {/* <Game /> */}
       {/* <ScrollUp />
       <Hero />
       <Video />
