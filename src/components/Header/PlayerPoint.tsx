@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 
-const PlayerPoint = ({ username, setLoading}) => {
+const PlayerPoint = ({ username }) => {
   const [point, setPoint] = useState()
   const getplayerinfo = async () => {
     try {
-      setLoading(true);
       const secretKey = process.env.NEXT_PUBLIC_PlayFab_Secret_Keys;
       const segmentId = process.env.NEXT_PUBLIC_PlayFab_Segments;
       const titleId = process.env.NEXT_PUBLIC_PlayFab_Title_ID;
@@ -29,7 +28,6 @@ const PlayerPoint = ({ username, setLoading}) => {
       if (player) {
         const updatedPoint = player.Statistics.Point || '0'; // Set point to '0' if it is null
         setPoint(updatedPoint);
-        setLoading(false);
       }
     } catch (error) {
       getplayerinfo();

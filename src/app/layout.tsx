@@ -8,7 +8,7 @@ import "node_modules/react-modal-video/css/modal-video.css";
 import "../styles/index.css";
 import Spinner from "@/components/Spinner/spinner";
 import { Providers } from "./providers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,6 +18,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const [loading, setLoading] = useState(true)
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    return () => clearTimeout(timeoutId);
+  }, []);
+  
   return (
     <html suppressHydrationWarning lang="en">
       <head>
@@ -25,9 +32,12 @@ export default function RootLayout({
       </head>
       <body className={`bg-[#FCFCFC] dark:bg-black `}>
         <Providers>
-          {loading && <Spinner/>}
-          <Header setLoading={setLoading}/>
-          {children}
+          { loading ?<Spinner/>:(
+          <>
+            <Header/>
+            {children}
+          </>
+          )}
           {/* <Footer /> */}
           {/* <ScrollToTop /> */}
         </Providers>

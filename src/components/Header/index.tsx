@@ -9,7 +9,7 @@ import menuData from "./menuData";
 import PlayerPoint from "./PlayerPoint";
 import UserProfile from "./UserProfile";
 
-const Header = ({setLoading}) => {
+const Header = () => {
   const usePathName = usePathname();
   let username = '';
 
@@ -132,7 +132,7 @@ const Header = ({setLoading}) => {
                         <Image alt="" src="images/svgs/cart.svg" width={40} height={40}/>
                       </button>
                       <UserProfile />
-                      <PlayerPoint username={username} setLoading={setLoading} />
+                      <PlayerPoint username={username}/>
                       {/* <Link
                         href="/"
                         className="ease-in-up shadow-btn hover:shadow-btn-hover hidden rounded-sm bg-[#FA9F4E] text-[#3F2E4E] hover:text-white  px-8 py-3 text-base font-bold transition duration-300 hover:bg-opacity-90 md:block md:px-9 lg:px-6 xl:px-9"

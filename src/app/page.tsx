@@ -28,7 +28,6 @@ export default function Home() {
       <div className="w-full h-full absolute">
         <Hero/>
       </div>  
-      {/* <Game /> */}
       {/* <ScrollUp />
       <Hero />
       <Video />
