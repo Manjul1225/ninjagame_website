@@ -5,7 +5,7 @@ import { faHouse } from '@fortawesome/free-solid-svg-icons';
 import Image from "next/image";
 import Link from "next/link";
 // import ThemeToggler from "./ThemeToggler";
-import menuData from "./MenuData";
+import menuData from "./menuData";
 import PlayerPoint from "./PlayerPoint";
 import UserProfile from "./UserProfile";
 
