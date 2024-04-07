@@ -21,7 +21,7 @@ export default function RootLayout({
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 2000);
     return () => clearTimeout(timeoutId);
   }, []);
   
@@ -30,7 +30,7 @@ export default function RootLayout({
       <head>
         <title>Ninja Studios</title>
       </head>
-      <body className={`bg-[#FCFCFC] dark:bg-black `}>
+      <body className={`bg-[#1D1019]`}>
         <Providers>
           { loading ?<Spinner/>:(
           <>
