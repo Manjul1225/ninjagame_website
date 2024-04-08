@@ -7,6 +7,8 @@ import { Providers } from "./providers";
 import { useEffect, useState } from "react";
 import { DataProvider } from "./datacontext";
 
+const inter = Inter({ subsets: ["latin"] });
+
 export default function RootLayout({
   children,
 }: {

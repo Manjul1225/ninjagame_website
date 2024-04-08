@@ -8,6 +8,7 @@ import { DataContext } from "./datacontext";
 export default function Home() {
   const {isLoggedIn, setLoggedIn} = useContext(DataContext);
   const router = useRouter();
+  // const [entityToken, setEntityToken] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -16,6 +17,7 @@ export default function Home() {
       toast.success("You are logged in Successfully");
     }
     const token = sessionStorage.getItem('entity_token')
+    // setEntityToken(token)
   }, []);
   return (
     <>
