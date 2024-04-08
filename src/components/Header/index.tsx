@@ -1,5 +1,6 @@
+'use client'
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse } from '@fortawesome/free-solid-svg-icons'; 
 import Image from "next/image";
@@ -8,19 +9,15 @@ import Link from "next/link";
 import menuData from "./menuData";
 import PlayerPoint from "./PlayerPoint";
 import UserProfile from "./UserProfile";
+import { DataContext } from "@/app/datacontext";
 
 const Header = () => {
+  const {token} = useContext(DataContext);
   const usePathName = usePathname();
-  let username = '';
-
-  if (typeof window !== 'undefined') {
-    username = sessionStorage.getItem('user_name');
-  }
-
+  let username = null;
   const router = useRouter();
   // Navbar toggle
   const [navbarOpen, setNavbarOpen] = useState(false);
-  const [entityToken, setEntityToken] = useState('');
   const navbarToggleHandler = () => {
     setNavbarOpen(!navbarOpen);
   };
@@ -37,21 +34,7 @@ const Header = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", handleStickyNavbar);
-
-    const token = sessionStorage.getItem('entity_token')
-    if (token)
-      setEntityToken(token)
-  });
-
-  // submenu handler
-  const [openIndex, setOpenIndex] = useState(-1);
-  const handleSubmenu = (index) => {
-    if (openIndex === index) {
-      setOpenIndex(-1);
-    } else {
-      setOpenIndex(index);
-    }
-  };
+  }, []);
 
   const handleReturnButton = () => {
     router.push('/');
@@ -73,7 +56,7 @@ const Header = () => {
                 className={`header-logo block w-full text-[#F4B13E] text-[30px] ${sticky ? "py-5 lg:py-2" : "py-8"
                   } `}
               >
-                <p>NINJA STAKE</p>
+                <Image src="/logo.png" width={240} height={100} alt=""/>
               </Link>
             </div>
             <div className="lg:w-[800px] flex items-center justify-between px-2">
@@ -107,7 +90,7 @@ const Header = () => {
                   <ul className="block lg:flex">
                     {menuData.map((menuItem, index) => (
                       <li key={index} className={`${usePathName === menuItem.path
-                        ? "lg:-skew-x-[20deg] lg:bg-[#F4B13E]": ""} transition-opacity px-4 py-2 group relative ${(!entityToken && ( index === 1) ? 'hidden' : '') } ${((username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2) && index === 1 ? 'hidden' : '')}`}>
+                        ? "lg:-skew-x-[20deg] lg:bg-[#F4B13E]": ""} transition-opacity px-4 py-2 group relative ${(!token && ( index === 1) ? 'hidden' : '') } ${((username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2) && index === 1 ? 'hidden' : '')}`}>
                         {
                           <Link
                             href={menuItem.path}
@@ -126,7 +109,7 @@ const Header = () => {
               </div>
               <div className="flex items-center justify-end pr-16 lg:pr-0">
                 {
-                  entityToken ? (
+                  token ? (
                     <>
                       <button className="mx-8 align-middle justify-center lg:flex hidden">
                         <Image alt="" src="images/svgs/cart.svg" width={40} height={40}/>

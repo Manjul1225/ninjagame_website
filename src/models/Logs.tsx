@@ -1,4 +1,3 @@
-// models/user.ts
 import mongoose, { Schema } from "mongoose";
 
 const logsSchema = new Schema(
