@@ -2,19 +2,18 @@ import { NextResponse, NextRequest } from "next/server"
 import { connect, close } from "@/libs/mongodb"
 import Users from "@/models/Users"
 import * as jose from 'jose';
-import { cookies } from "next/headers";
 const secretKey = process.env.NEXT_PUBLIC_SecretKey;
 
 export async function POST(request: NextRequest, response: NextResponse) {
     
     // Function to generate a JWT token
     const generateJwtToken = (payload) => {
-    const jwtToken =  new jose.SignJWT(payload)
+      const jwtToken =  new jose.SignJWT(payload)
                         .setProtectedHeader({ alg: 'HS256' })
                         .setIssuedAt()
                         .setExpirationTime('1h')
                         .sign(new TextEncoder().encode(secretKey));  
-      return jwtToken;
+      return String(jwtToken);
     };
     try {
         const { username, password } = await request.json();
