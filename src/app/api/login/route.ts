@@ -4,7 +4,6 @@ import Users from "@/models/Users"
 import * as jose from 'jose';
 import bcrypt from 'bcrypt';
 const secretKey = process.env.NEXT_PUBLIC_SecretKey;
-connect();
 
 export async function POST(request: NextRequest, response: NextResponse) {
     
@@ -18,6 +17,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
       return String(jwtToken);
     };
     try {
+        connect();
         const { username, password } = await request.json();
         const user = await Users?.findOne({ name: username });
         // User is not existed
