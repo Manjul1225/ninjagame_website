@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <>
       <div className="w-full h-auto">
-          {/* <Hero/> */}
+          <Hero/>
           <ToastContainer />
       </div>  
     </>

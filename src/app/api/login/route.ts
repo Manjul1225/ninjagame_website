@@ -3,9 +3,9 @@ import { connect, close } from "@/libs/mongodb"
 import Users from "@/models/Users"
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+const secretKey = process.env.NEXT_PUBLIC_SecretKey;
 
 export async function POST(request: NextRequest, response: NextResponse) {
-    const secretKey = process.env.NEXT_PUBLIC_SecretKey;
     
     // Function to generate a JWT token
     const generateJwtToken = (payload) => {
@@ -21,9 +21,17 @@ export async function POST(request: NextRequest, response: NextResponse) {
             return NextResponse.json({ message: "User not found" }, { status: 404 });
           }
         close();
+        // Generate the token and set the cookie
+        
         const token = generateJwtToken({'user_name':username, 'password': password});
-        cookies().set('token', token, { expires: 24*60*60*1000, path:"/", httpOnly: true });
-        return NextResponse.json({ user }, { status: 200 });
+        response = NextResponse.json({
+          status: 200,
+        });
+
+        response.cookies.set('token', token, {
+          httpOnly: true,
+        });
+        return response
       } catch (error) {
         return NextResponse.error();
       }
