@@ -4,6 +4,7 @@ import Users from "@/models/Users"
 import * as jose from 'jose';
 import bcrypt from 'bcrypt';
 const secretKey = process.env.NEXT_PUBLIC_SecretKey;
+connect();
 
 export async function POST(request: NextRequest, response: NextResponse) {
     
@@ -18,23 +19,22 @@ export async function POST(request: NextRequest, response: NextResponse) {
     };
     try {
         const { username, password } = await request.json();
-        const client = await connect();
-        const collection = client?.db.collection("Users");
-        const user = await collection?.findOne({ name: username });
+        const user = await Users?.findOne({ name: username });
         // User is not existed
         if(!user){
           return NextResponse.json({ message: "Username is not existed" });
         }
-
+        
         // Password did not match
-        if (!(await bcrypt.compare(password, user.password))) {
-            return NextResponse.json({ message: "Password Incorrect" });
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+          return NextResponse.json({ message: "Invalid password" });
         }
         close();
         // Generate the token and set the cookie
         const token = generateJwtToken({'user_name':username, 'password': password});
         response = NextResponse.json({
-          message: "OK"
+          message: "User authenticated"
         });
 
         response.cookies.set('token', token, {

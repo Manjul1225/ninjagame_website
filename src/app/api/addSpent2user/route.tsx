@@ -1,14 +1,15 @@
 import { connect, close } from "@/libs/mongodb"
 import { NextResponse, NextRequest } from "next/server"
+import Users from "@/models/Users";
+connect()
 
 export async function POST(request: NextRequest, response: NextResponse) {
     try {
         const { username, amount } = await request.json();
-        const client = await connect();
-        const collection = client?.db.collection("Users");
-        const user = await collection?.findOne({ name: username });
+        const user = await Users?.findOne({ name: username });
         if(user){
-            user.totalSpent = user.totalSpent + amount;
+            user.totalspent = user.totalspent + amount;
+            await user.save();
             return NextResponse.json({message: "Success"});
         }
         return NextResponse.json({message: "Failed"});

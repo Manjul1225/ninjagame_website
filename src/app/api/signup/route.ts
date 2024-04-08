@@ -1,22 +1,28 @@
 import { NextResponse, NextRequest } from "next/server"
 import { connect, close } from "@/libs/mongodb"
+import Users from "@/models/Users";
 import bcrypt from 'bcrypt';
 const secretKey = process.env.NEXT_PUBLIC_SecretKey;
+connect();
 
 export async function POST(request: NextRequest, response: NextResponse) {
     try {
         const { username, email, password } = await request.json();
-        const client = await connect();
-        const collection = client?.db.collection("Users");
-        
         // Check user is exist
-        const user = await collection?.findOne({ email: email });
+        const user = await Users?.findOne({ username: username });
         if(user){
             return NextResponse.json({ message: "User is already existed" });  
         }
+        
         // Register
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = await collection?.add({ name: username, email: email, password:hashedPassword, point: 0, totalSpent: 0 });
+        const newUser = await Users?.create({
+            name: username,
+            email: email,
+            password: hashedPassword,
+        });
+        console.log(newUser);
+        
         if(newUser){
             return NextResponse.json({ message: "OK" });  
         }

@@ -1,14 +1,13 @@
 import { connect, close } from "@/libs/mongodb"
 import { NextResponse, NextRequest } from "next/server"
+import Users from "@/models/Users";
+connect()
 
-export async function GET(request: NextRequest, response: NextResponse) {
+export async function GET() {
     try {
-        const { username } = await request.json();
-        const client = await connect();
-        const collection = client?.db.collection("Users");
-        const user = await collection?.findOne({ name: username });
-        if(user) {
-            return NextResponse.json({user: user});
+        const users = await Users?.find();
+        if(users) {
+            return NextResponse.json({users: users});
         }
         return NextResponse.json({message: "Failed"});
     }catch (error) {
