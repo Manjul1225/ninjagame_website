@@ -7,14 +7,14 @@ export async function POST(request: NextRequest, response: NextResponse) {
         connect();
         const { username, amount } = await request.json();
         const user = await Users?.findOne({ name: username });
-        if(user){
-            user.totalspent = user.totalspent + amount;
-            await user.save();
+        if(user?.username !== null){
+            user.totalSpent = user.totalSpent + amount;
+            await user?.save();
             close();
-            return NextResponse.json({message: "Success"});
+            return NextResponse.json({status:200, message: "Success"});
         }
-        return NextResponse.json({message: "Failed"});
+        return NextResponse.json({status:401, message: "Failed"});
     }catch (error) {
-        return NextResponse.json({message: "Unknown Error"});
+        return NextResponse.json({status:500, message: "Unknown Error"});
     }
 }

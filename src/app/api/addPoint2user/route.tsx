@@ -4,17 +4,17 @@ import Users from "@/models/Users";
 
 export async function POST(request: NextRequest, response: NextResponse) {
     try {
-        connect();
+        connect()
         const { username, amount } = await request.json();
-        const user = await Users?.findOne({ name: username });
-        if(user){
+        const user = await Users?.findOne({ username: username });
+        if(user?.username !== null){
             user.point = user.point + amount;
-            await user.save();
+            await user?.save();
             close();
-            return NextResponse.json({message: "Success"});
+            return NextResponse.json({status:200, message: "Success"});
         }
-        return NextResponse.json({message: "Failed"});
+        return NextResponse.json({status:401, message: "Failed"});
     }catch (error) {
-        return NextResponse.json({message: "Unknown Error"});
+        return NextResponse.json({StaticRange:500, message: "Unknown Error"});
     }
 }

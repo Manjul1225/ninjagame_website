@@ -6,14 +6,10 @@ export async function POST(request: NextRequest, response: NextResponse) {
     try {
         connect();
         const {username}  = await request.json();
-        console.log(request.body);
-        const user = await Users?.findOne({ name: username });
+        const user = await Users?.findOne({ username: username });
         close();
-        if(user) {
-            return NextResponse.json({user: user});
-        }
-        return NextResponse.json({message: "Failed"});
+        return NextResponse.json({status:200, user: user});
     }catch (error) {
-        return NextResponse.json({message: "Unknown Error"});
+        return NextResponse.json({status:404, message: "Failed"});
     }
 }

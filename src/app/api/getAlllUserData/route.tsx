@@ -7,11 +7,8 @@ export async function GET() {
         connect()
         const users = await Users?.find();
         close();
-        if(users) {
-            return NextResponse.json({users: users});
-        }
-        return NextResponse.json({message: "Failed"});
+        return NextResponse.json({users: users});
     }catch (error) {
-        return NextResponse.json({message: "Unknown Error"});
+        return NextResponse.json({status:500, message: "Unknown Error"});
     }
 }

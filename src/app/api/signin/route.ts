@@ -19,29 +19,27 @@ export async function POST(request: NextRequest, response: NextResponse) {
     try {
         connect();
         const { username, password } = await request.json();
-        const user = await Users?.findOne({ name: username });
+        const user = await Users?.findOne({ username: username });
         // User is not existed
-        if(!user){
-          return NextResponse.json({ message: "Username is not existed" });
+        if(user?.username == null){
+          return NextResponse.json({ status:401, message: "Username is not existed" });
         }
         
         // Password did not match
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-          return NextResponse.json({ message: "Invalid password" });
+          return NextResponse.json({ status:402, message: "Invalid password" });
         }
         close();
         // Generate the token and set the cookie
         const token = generateJwtToken({'user_name':username, 'password': password});
-        response = NextResponse.json({
-          message: "User authenticated"
-        });
+        response = NextResponse.json({status:200, message: "User authenticated" });
 
         response.cookies.set('token', token, {
           httpOnly: true,
         });
         return response
       } catch (error) {
-        return NextResponse.json({message: "Unknown Error"});
+        return NextResponse.json({status: 500, message: "Unknown Error"});
       }
 }
