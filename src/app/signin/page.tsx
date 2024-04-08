@@ -1,13 +1,13 @@
 "use client"
 
-// import { cookies } from "next/headers";
+import { cookies } from "next/headers";
 import { useState, useContext } from "react";
 import { useRouter } from 'next/navigation';
 import 'react-toastify/dist/ReactToastify.css';
 import { DataContext } from "../datacontext";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
-// import cookieCutter from 'cookie-cutter';
+import cookieCutter from 'cookie-cutter';
 
 const SigninPage = () => {
   const { setLoggedIn, setToken} = useContext(DataContext);
@@ -41,10 +41,10 @@ const SigninPage = () => {
       myPromise.then(function() {
         // Get CookieValue
         // Set the Cookie value
-        // const token = cookieCutter.get('token');
-        // alert(token)
-        // if (token)
-          // setToken(token);
+        const token = cookieCutter.get('token');
+        alert(token)
+        if (token)
+          setToken(token);
         router.push('/');
       });
     })
