@@ -6,13 +6,13 @@ export async function POST(request: NextRequest, response: NextResponse) {
     try {
         connect();
         const { username, amount } = await request.json();
-        const user = await Users?.findOne({ name: username });
-        if(user?.username !== null){
+        const user = await Users?.findOne({ username: username });
+        if(user !== null){
             user.totalSpent = user.totalSpent + amount;
             await user?.save();
             return NextResponse.json({status:200, message: "Success"});
         }
-        return NextResponse.json({status:401, message: "Failed"});
+        return NextResponse.json({status:401, message: "Username is not existed"});
     }catch (error) {
         return NextResponse.json({status:500, message: "Unknown Error"});
     }

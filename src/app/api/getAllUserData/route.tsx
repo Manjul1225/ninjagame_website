@@ -4,7 +4,7 @@ import Users from "@/models/Users";
 
 export async function GET() {
     try {
-        connect()
+        connect();
         const users = await Users?.find();
         return NextResponse.json({users: users});
     }catch (error) {
