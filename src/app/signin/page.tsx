@@ -21,7 +21,7 @@ const SigninPage = () => {
       username: username,
       password: password,
     });
-    axios.post('/api/login', credentials, {
+    axios.post('/api/signin', credentials, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -36,7 +36,6 @@ const SigninPage = () => {
       });
     
       myPromise.then(function() {
-        // Set the Cookie value
         router.push('/');
         setToken(true);
         setLoading(false);
@@ -44,9 +43,8 @@ const SigninPage = () => {
     })
     .catch((error) => {
       toast.error("Username or Password incorrect!");
+      setLoading(false);
     });
-      // Storing relevant data in session
-      // sessionStorage.setItem("entity_token", player.data.EntityToken.EntityToken)
   };
 
   return (

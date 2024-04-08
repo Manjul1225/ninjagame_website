@@ -8,6 +8,8 @@ export function middleware(request:NextRequest) {
 
   if(!token){
     return NextResponse.redirect(new URL('/signin', request.url));
+  } else {
+    NextResponse.redirect(new URL('/', request.url));
   }
 
   try {
@@ -24,5 +26,5 @@ export function middleware(request:NextRequest) {
 }
 
 export const config = {
-  matcher: ["/^api/(.*)", '/^(store|about|/)', '/admin', '/game'],
+  matcher: ["/^api/(.*)", '/^(store|about|/)', '/admin', '/game', '/signin'],
 };
