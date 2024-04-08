@@ -14,12 +14,7 @@ import { DataContext } from "@/app/datacontext";
 const Header = () => {
   const {token} = useContext(DataContext);
   const usePathName = usePathname();
-  let username = '';
-
-  // if (typeof window !== 'undefined') {
-  //   username = sessionStorage.getItem('user_name');
-  // }
-
+  let username = null;
   const router = useRouter();
   // Navbar toggle
   const [navbarOpen, setNavbarOpen] = useState(false);
@@ -40,16 +35,6 @@ const Header = () => {
   useEffect(() => {
     window.addEventListener("scroll", handleStickyNavbar);
   }, []);
-
-  // submenu handler
-  const [openIndex, setOpenIndex] = useState(-1);
-  const handleSubmenu = (index) => {
-    if (openIndex === index) {
-      setOpenIndex(-1);
-    } else {
-      setOpenIndex(index);
-    }
-  };
 
   const handleReturnButton = () => {
     router.push('/');

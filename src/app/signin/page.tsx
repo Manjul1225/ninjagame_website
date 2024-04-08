@@ -10,7 +10,7 @@ import { toast, ToastContainer } from "react-toastify";
 import cookieCutter from 'cookie-cutter';
 
 const SigninPage = () => {
-  const { setLoggedIn, setEntityToken} = useContext(DataContext);
+  const { setLoggedIn, setToken} = useContext(DataContext);
   const [players, setPlayers] = useState([]);
 
   const [username, setusername] = useState('');
@@ -44,7 +44,7 @@ const SigninPage = () => {
         const token = cookieCutter.get('token');
         alert(token)
         if (token)
-          setEntityToken(token);
+          setToken(token);
         router.push('/');
       });
     })
