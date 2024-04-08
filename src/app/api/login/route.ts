@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from "next/server"
 import { connect, close } from "@/libs/mongodb"
 import Users from "@/models/Users"
 import * as jose from 'jose';
+import bcrypt from 'bcrypt';
 const secretKey = process.env.NEXT_PUBLIC_SecretKey;
 
 export async function POST(request: NextRequest, response: NextResponse) {
@@ -22,19 +23,18 @@ export async function POST(request: NextRequest, response: NextResponse) {
         const user = await collection?.findOne({ name: username });
         // User is not existed
         if(!user){
-          return NextResponse.json({ status: 400 });
+          return NextResponse.json({ message: "Username is not existed" });
         }
 
         // Password did not match
-        if (!(user.password == password)) {
-            return NextResponse.json({ status: 401 });
+        if (!(await bcrypt.compare(password, user.password))) {
+            return NextResponse.json({ message: "Password Incorrect" });
         }
         close();
         // Generate the token and set the cookie
-        
         const token = generateJwtToken({'user_name':username, 'password': password});
         response = NextResponse.json({
-          status: 200,
+          message: "OK"
         });
 
         response.cookies.set('token', token, {
@@ -42,6 +42,6 @@ export async function POST(request: NextRequest, response: NextResponse) {
         });
         return response
       } catch (error) {
-        return NextResponse.json({status: 500});
+        return NextResponse.json({message: "Unknown Error"});
       }
 }
