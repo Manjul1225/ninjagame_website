@@ -9,6 +9,7 @@ import "../styles/index.css";
 import Spinner from "@/components/Spinner/spinner";
 import { Providers } from "./providers";
 import { useEffect, useState } from "react";
+import { DataProvider } from "./datacontext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,8 +35,10 @@ export default function RootLayout({
         <Providers>
           { loading ?<Spinner/>:(
           <>
-            <Header/>
-            {children}
+            <DataProvider>
+              <Header/>
+              {children}
+            </DataProvider>
           </>
           )}
           {/* <Footer /> */}

@@ -1,16 +1,16 @@
 "use client"
 
-import Link from "next/link";
-import { useState } from "react";
+import { cookies } from "next/headers";
+import { useState, useContext } from "react";
 import { useRouter } from 'next/navigation';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { DataContext } from "../datacontext";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import cookieCutter from 'cookie-cutter';
 
 const SigninPage = () => {
-  const secretKey = process.env.NEXT_PUBLIC_PlayFab_Secret_Keys;
-  const segmentId = process.env.NEXT_PUBLIC_PlayFab_Segments;
-  const titleId = process.env.NEXT_PUBLIC_PlayFab_Title_ID;
-
+  const { setLoggedIn, setEntityToken} = useContext(DataContext);
   const [players, setPlayers] = useState([]);
 
   const [username, setusername] = useState('');
@@ -20,53 +20,39 @@ const SigninPage = () => {
 
   const handleSignin = async (event) => {
     event.preventDefault();
-    try {
-      const loginResponse = await fetch(`https://${titleId}.playfabapi.com/Client/LoginWithPlayFab`, {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-        },
-        body: JSON.stringify({
-          Username: username,
-          Password: password,
-          TitleId: titleId,
-          InfoRequestParameters: {
-            GetPlayerProfile: true
-          }
-        }),
-      })
-      var json_response = await loginResponse.json();
-
-      if (!loginResponse.ok) {
-        throw new Error(json_response.errorMessage)
-      }
-
-      // Storing relevant data in session
-      sessionStorage.setItem("entity_token", json_response.data.EntityToken.EntityToken)
-
+    const credentials = JSON.stringify({
+      username: username,
+      password: password,
+    });
+    axios.post('/api/login', credentials, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then((response) => {
       // Successful login, redirect to home page         
-      router.push('/');
-
-      const sessionTicket = json_response.data.SessionTicket;
-
-      sessionStorage.setItem("sessionTicket", json_response.data.SessionTicket)
-
-      const dataResponse = await fetch(`https://${titleId}.playfabapi.com/Client/GetAccountInfo`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Authorization': sessionTicket, // Replace with the client session ticket
-        },
-        body: JSON.stringify(loginResponse),
+      let myPromise = new Promise(function(resolve, reject) {
+        setTimeout(function() { 
+          setLoggedIn(true);
+          resolve(""); // Resolve the promise after the toast message
+        }, 500);
       });
-
-      const data = await dataResponse.json();
-      sessionStorage.setItem("user_name", data.data.AccountInfo.Username)      
-    }
-    catch (error) {
+    
+      myPromise.then(function() {
+        // Get CookieValue
+        // Set the Cookie value
+        const token = cookieCutter.get('token');
+        alert(token)
+        if (token)
+          setEntityToken(token);
+        router.push('/');
+      });
+    })
+    .catch((error) => {
       toast.error("Username or Password incorrect!");
-      // alert("Username or Password incorrect!")
-    }
+    });
+      // Storing relevant data in session
+      // sessionStorage.setItem("entity_token", player.data.EntityToken.EntityToken)
   };
 
   return (

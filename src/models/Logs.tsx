@@ -1,4 +1,3 @@
-// models/user.ts
 import mongoose, { Schema } from "mongoose";
 
 const logsSchema = new Schema(
@@ -15,5 +14,5 @@ const logsSchema = new Schema(
   }
 );
 
-const Logs = mongoose.models.Logs || mongoose.model("Logs", logsSchema)
+const Logs = mongoose.model("Logs", logsSchema)
 export default Logs
