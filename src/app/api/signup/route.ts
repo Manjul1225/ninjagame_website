@@ -8,7 +8,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
         connect();
         const { username, email, password } = await request.json();
         // Check user is exist
-        const user1 = await Users?.findOne({ name: username });
+        const user1 = await Users?.findOne({ username: username });
         const user2 = await Users?.findOne({ email: email });
         if(user1 || user2) {
             return NextResponse.json({ message: "User is already existed" });  
