@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server"
 import { connect, close } from "@/libs/mongodb"
 import Users from "@/models/Users";
-// import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 export async function POST(request: NextRequest, response: NextResponse) {
     try {
@@ -14,11 +14,11 @@ export async function POST(request: NextRequest, response: NextResponse) {
         }
         
         // Register
-        // const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 6);
         const newUser = await Users?.create({
             name: username,
             email: email,
-            password: password,
+            password: hashedPassword,
         });
         close();
         console.log(newUser);
