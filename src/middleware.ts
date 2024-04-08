@@ -1,5 +1,6 @@
+'use server'
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from "jsonwebtoken";
+import * as jose from 'jose';
 const secretKey = process.env.NEXT_PUBLIC_SecretKey;
 
 export function middleware(request:NextRequest) {
@@ -10,8 +11,12 @@ export function middleware(request:NextRequest) {
   }
 
   try {
-    jwt.verify(token, secretKey);
+    jose.jwtVerify(
+      token, new TextEncoder().encode(process.env.NEXT_PUBLIC_SecretKey)
+    );
   } catch(error){
+    console.log(error);
+    
     return NextResponse.redirect(new URL('/signin', request.url));
   }
 

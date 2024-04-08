@@ -1,17 +1,17 @@
 "use client"
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import 'react-toastify/dist/ReactToastify.css';
 import { DataContext } from "../datacontext";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+import { cookies } from "next/headers";
 
 const SigninPage = () => {
-  const { setLoggedIn, setToken} = useContext(DataContext);
+  const { setLoggedIn, token, setToken} = useContext(DataContext);
   const [username, setusername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setLoading] = useState(null);
-
   const router = useRouter();
 
   const handleSignin = async (event) => {
@@ -61,7 +61,7 @@ const SigninPage = () => {
                 </h3>
                 <p className="mb-11 text-center text-base font-medium text-body-color">
                   Login to your account for a faster checkout.
-                </p>
+                </p>  
 
                 <div className="mb-8 flex items-center justify-center">
                   <span className="hidden h-[1px] w-full max-w-[70px] bg-body-color/50 sm:block"></span>
