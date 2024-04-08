@@ -1,7 +1,6 @@
 import { connect, close } from "@/libs/mongodb"
 import { NextResponse, NextRequest } from "next/server"
 import Users from "@/models/Users";
-import Logs from "@/models/Logs";
 connect()
 
 export async function POST(request: NextRequest, response: NextResponse) {
