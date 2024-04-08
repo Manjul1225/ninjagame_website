@@ -20,9 +20,15 @@ export async function POST(request: NextRequest, response: NextResponse) {
         const client = await connect();
         const collection = client?.db.collection("Users");
         const user = await collection?.findOne({ name: username });
+        // User is not existed
+        if(!user){
+          return NextResponse.json({ status: 400 });
+        }
+
+        // Password did not match
         if (!(user.password == password)) {
-            return NextResponse.json({ message: "User not found" }, { status: 404 });
-          }
+            return NextResponse.json({ status: 401 });
+        }
         close();
         // Generate the token and set the cookie
         
@@ -36,6 +42,6 @@ export async function POST(request: NextRequest, response: NextResponse) {
         });
         return response
       } catch (error) {
-        return NextResponse.error();
+        return NextResponse.json({status: 500});
       }
 }
