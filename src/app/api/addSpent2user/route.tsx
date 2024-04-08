@@ -10,7 +10,6 @@ export async function POST(request: NextRequest, response: NextResponse) {
         if(user?.username !== null){
             user.totalSpent = user.totalSpent + amount;
             await user?.save();
-            close();
             return NextResponse.json({status:200, message: "Success"});
         }
         return NextResponse.json({status:401, message: "Failed"});

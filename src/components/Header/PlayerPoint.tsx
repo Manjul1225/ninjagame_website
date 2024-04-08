@@ -6,24 +6,16 @@ import axios from "axios"
     const [point, setPoint] = useState()
     const getplayerinfo = async () => {
       try {
-        const player = await axios.post('/api/getUserData', {
-          params:{username: username}
-        });
-
-        if (!player.status) {
-          const errorData = await player.data;
-          throw new Error(errorData.errorMessage);
+        const player = await axios.post('/api/getUserData', username);
+        alert(player.data.status);
+        if (player?.data.status === 200) {
+          alert("b");
+          const updatedPoint = player?.data.user?.point || '0'; // Set point to '0' if it is null
+          setPoint(updatedPoint);
         }
-
-      // const playersInSegment = await player.json();
-      // const player = playersInSegment.data.PlayerProfiles.find(player => player.LinkedAccounts[0].Username === username);
-
-      if (player) {
-        const updatedPoint = player.data.point || '0'; // Set point to '0' if it is null
-        setPoint(updatedPoint);
-      }
-    } catch (error) {
-      getplayerinfo();
+        alert("c");
+      } catch (error) {
+        console.log(error);
     }
   }
 

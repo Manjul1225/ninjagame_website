@@ -20,8 +20,9 @@ export async function POST(request: NextRequest, response: NextResponse) {
         connect();
         const { username, password } = await request.json();
         const user = await Users?.findOne({ username: username });
+        
         // User is not existed
-        if(user?.username == null){
+        if(user === null){
           return NextResponse.json({ status:401, message: "Username is not existed" });
         }
         
@@ -30,7 +31,6 @@ export async function POST(request: NextRequest, response: NextResponse) {
         if (!isPasswordValid) {
           return NextResponse.json({ status:402, message: "Invalid password" });
         }
-        close();
         // Generate the token and set the cookie
         const token = generateJwtToken({'user_name':username, 'password': password});
         response = NextResponse.json({status:200, message: "User authenticated" });

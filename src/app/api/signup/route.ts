@@ -25,7 +25,6 @@ export async function POST(request: NextRequest, response: NextResponse) {
             password: hashedPassword,
         });
         
-        await close();
         return NextResponse.json({ status: 200, message: "User created successfully" });  
     } catch (error) {
         return NextResponse.json({ status: 500, message: "Internal server error" });
