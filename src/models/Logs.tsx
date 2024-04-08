@@ -9,9 +9,6 @@ const logsSchema = new Schema(
     admin: { type: String, required: true },
     img: { type: String, required: true },
   },
-  {
-    timestamps: true
-  }
 );
 
 const Logs = mongoose.models.Logs ||mongoose.model("Logs", logsSchema)

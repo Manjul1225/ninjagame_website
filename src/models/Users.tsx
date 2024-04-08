@@ -8,9 +8,6 @@ const UsersSchema = new Schema(
     point: { type: Number, required: true, default:1000 },
     totalspent: { type: Number, required: true, default:0 },
   },
-  {
-    timestamps: true
-  }
 );
 
 const Users = mongoose.models.Users || mongoose.model("Users", UsersSchema);

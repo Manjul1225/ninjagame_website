@@ -4,35 +4,32 @@ import axios from "axios"
 
   const PlayerPoint = ({ username }) => {
     const [point, setPoint] = useState()
-  //   const getplayerinfo = async () => {
-  //     try {
-  //       // const secretKey = process.env.NEXT_PUBLIC_PlayFab_Secret_Keys;
-  //       // const segmentId = process.env.NEXT_PUBLIC_PlayFab_Segments;
-  //       // const titleId = process.env.NEXT_PUBLIC_PlayFab_Title_ID;
-  //       const player = await axios.get('/api/player', {
-  //         params:{username: username}
-  //       });
+    const getplayerinfo = async () => {
+      try {
+        const player = await axios.post('/api/getUserData', {
+          params:{username: username}
+        });
 
-  //       if (!player.status) {
-  //         const errorData = await player.data;
-  //         throw new Error(errorData.errorMessage);
-  //       }
+        if (!player.status) {
+          const errorData = await player.data;
+          throw new Error(errorData.errorMessage);
+        }
 
-  //     // const playersInSegment = await player.json();
-  //     // const player = playersInSegment.data.PlayerProfiles.find(player => player.LinkedAccounts[0].Username === username);
+      // const playersInSegment = await player.json();
+      // const player = playersInSegment.data.PlayerProfiles.find(player => player.LinkedAccounts[0].Username === username);
 
-  //     if (player) {
-  //       const updatedPoint = player.data.point || '0'; // Set point to '0' if it is null
-  //       setPoint(updatedPoint);
-  //     }
-  //   } catch (error) {
-  //     getplayerinfo();
-  //   }
-  // }
+      if (player) {
+        const updatedPoint = player.data.point || '0'; // Set point to '0' if it is null
+        setPoint(updatedPoint);
+      }
+    } catch (error) {
+      getplayerinfo();
+    }
+  }
 
-  // useEffect(() => {
-  //   getplayerinfo();
-  // }, [])
+  useEffect(() => {
+    getplayerinfo();
+  }, [])
 
   return (
     <div className="border rounded border-[#F4B13E] lg:flex flex-row m-4 hidden">
