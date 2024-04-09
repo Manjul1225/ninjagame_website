@@ -30,11 +30,11 @@ export default function LogTable() {
   if (typeof window !== 'undefined') {
     const username = sessionStorage.getItem('username');
     const token = sessionStorage.getItem('token');
-    // if (!token) {
-    //   push('/signin');
-    // }
-    // if (username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2)
-    //   push('/signin');
+    if (!token) {
+      push('/');
+    }
+    if (username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2)
+      push('/');
   }
 
   const handleSearchChange = (event) => {

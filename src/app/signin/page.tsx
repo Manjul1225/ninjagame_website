@@ -13,10 +13,6 @@ const SigninPage = () => {
   const [isLoading, setLoading] = useState(null);
   const router = useRouter();
 
-  useEffect(()=>{
-    const token = localStorage.getItem("token");
-    if(token) router.push("/")
-  }, []);
   const handleSignin = async (event) => {
     event.preventDefault();
     setLoading(true);

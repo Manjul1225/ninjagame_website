@@ -40,11 +40,11 @@ const PointTable = () => {
   if (typeof window !== 'undefined') {
     const username = localStorage.getItem('username');
     const token = localStorage.getItem('token');
-    // if (!token) {
-    //   push('/signin');
-    // }
-    // if (username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2)
-    //   push('/signin');
+    if (!token) {
+      push('/');
+    }
+    if (username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2)
+      push('/');
   }
 
   useEffect(()=>{
