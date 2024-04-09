@@ -4,9 +4,9 @@ import Users from "@/models/Users";
 connect();
 export async function POST(request: NextRequest, response: NextResponse) {
     try {
-        const {username}  = await request.json();
+        let {username}  = await request.json();
         // console.log(username);
-        const user = await Users?.findOne({ username: username });
+        let user = await Users?.findOne({ username: username });
 
         if(user !== null) { 
             return NextResponse.json({status:200, user: user});

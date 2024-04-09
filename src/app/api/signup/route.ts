@@ -6,19 +6,19 @@ import bcrypt from 'bcrypt';
 export async function POST(request: NextRequest, response: NextResponse) {
     try {
         await connect();
-        const { username, email, password } = await request.json();
+        let { username, email, password } = await request.json();
         
-        const user1 = await Users.findOne({ username: username });
+        let user1 = await Users.findOne({ username: username });
         if(user1 !== null){
             return NextResponse.json({ status: 401, message: "Username already exists" });  
         }
         
-        const user2 = await Users.findOne({ email: email });
+        let user2 = await Users.findOne({ email: email });
         if(user2 !== null){
             return NextResponse.json({ status: 402, message: "Email already exists" });  
         }
         
-        const hashedPassword = await bcrypt.hash(password, 6);
+        let hashedPassword = await bcrypt.hash(password, 6);
         await Users.create({
             username: username,
             email: email,

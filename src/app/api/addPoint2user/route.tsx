@@ -5,8 +5,8 @@ import Users from "@/models/Users";
 export async function POST(request: NextRequest, response: NextResponse) {
     try {
         connect()
-        const { username, amount } = await request.json();
-        const user = await Users?.findOne({ username: username });
+        let { username, amount } = await request.json();
+        let user = await Users?.findOne({ username: username });
         if(user !== null){
             user.point = user.point + amount;
             await user?.save();

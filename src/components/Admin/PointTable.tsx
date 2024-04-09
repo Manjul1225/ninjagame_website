@@ -119,7 +119,6 @@ const PointTable = () => {
       // Refesh the players
       addPoint();
       writeData();
-      getData();
     } catch (error) {
       console.error('Error updating player statistics:', error);
     }

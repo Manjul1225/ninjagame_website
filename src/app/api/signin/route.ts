@@ -18,8 +18,8 @@ export async function POST(request: NextRequest, response: NextResponse) {
     };
     try {
         connect();
-        const { username, password } = await request.json();
-        const user = await Users?.findOne({ username: username });
+        let { username, password } = await request.json();
+        let user = await Users?.findOne({ username: username });
         
         // User is not existed
         if(user === null){
@@ -28,13 +28,13 @@ export async function POST(request: NextRequest, response: NextResponse) {
         }
         
         // Password did not match
-        const isPasswordValid = await bcrypt.compare(password, user.password);
+        let isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
           return NextResponse.error();
           // NextResponse.json({ status:402, message: "Invalid password" });
         }
         // Generate the token and set the cookie
-        const token = await generateJwtToken({'user_name':username, 'password': password});
+        let token = await generateJwtToken({'user_name':username, 'password': password});
         response = NextResponse.json({status:200, message: "User authenticated", token:token });
         
         return response

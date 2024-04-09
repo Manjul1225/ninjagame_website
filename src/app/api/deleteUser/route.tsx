@@ -5,8 +5,8 @@ connect();
 
 export async function POST(request:NextRequest, response:NextResponse) {
     try {
-        const { id } = await request.json();
-        const user = await Users.findOne({_id: id})
+        let { id } = await request.json();
+        let user = await Users.findOne({_id: id})
         if(user != null)
             await Users.deleteOne({_id: id});
         return NextResponse.json({status:200});

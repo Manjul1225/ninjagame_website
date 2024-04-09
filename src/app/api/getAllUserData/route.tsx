@@ -5,7 +5,7 @@ import Users from "@/models/Users";
 export async function GET() {
     try {
         connect();
-        const users = await Users?.find();
+        let users = await Users?.find();
         return NextResponse.json({users: users});
     }catch (error) {
         return NextResponse.json({status:500, message: "Unknown Error"});
