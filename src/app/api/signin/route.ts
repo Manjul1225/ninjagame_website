@@ -23,13 +23,15 @@ export async function POST(request: NextRequest, response: NextResponse) {
         
         // User is not existed
         if(user === null){
-          return NextResponse.json({status:401, message: "Username is not existed" });
+          return NextResponse.error();
+          // return NextResponse.json({status:401, message: "Username is not existed" });
         }
         
         // Password did not match
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-          NextResponse.json({ status:402, message: "Invalid password" });
+          return NextResponse.error();
+          // NextResponse.json({ status:402, message: "Invalid password" });
         }
         // Generate the token and set the cookie
         const token = await generateJwtToken({'user_name':username, 'password': password});
@@ -37,6 +39,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
         
         return response
       } catch (error) {
-        NextResponse.json({status: 500, message: "Unknown Error"});
+        return NextResponse.error();
+        // NextResponse.json({status: 500, message: "Unknown Error"});
       }
 }
