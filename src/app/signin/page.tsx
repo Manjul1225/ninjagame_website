@@ -5,15 +5,18 @@ import 'react-toastify/dist/ReactToastify.css';
 import { DataContext } from "../datacontext";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
-import { cookies } from "next/headers";
 
 const SigninPage = () => {
-  const { setLoggedIn, token, setToken, setUsername} = useContext(DataContext);
+  const { setLoggedIn, token } = useContext(DataContext);
   const [username, setusername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setLoading] = useState(null);
   const router = useRouter();
 
+  useEffect(()=>{
+    const token = localStorage.getItem("token");
+    if(token) router.push("/")
+  }, []);
   const handleSignin = async (event) => {
     event.preventDefault();
     setLoading(true);
@@ -24,24 +27,16 @@ const SigninPage = () => {
     axios.post('/api/signin', credentials, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `${localStorage.getItem('token')}`
       },
     })
     .then((response) => {
-      // Successful login, redirect to home page         
-      let myPromise = new Promise(function(resolve, reject) {
-        setTimeout(function() { 
-          setLoggedIn(true);
-          resolve(""); // Resolve the promise after the toast message
-        }, 500);
-      });
-    
-      myPromise.then(function() {
-        router.push('/');
-        setToken(true);
-        setUsername(username);
-        setLoading(false);
-      });
+      // Successful login, redirect to home page     
+      const token =  response?.data.token;    
+      setLoggedIn(true);
+      localStorage.setItem('username', username);
+      localStorage.setItem('token', token);
+      setLoading(false); 
+      router.push('/');
     })
     .catch((error) => {
       toast.error("Username or Password incorrect!");

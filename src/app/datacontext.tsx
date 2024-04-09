@@ -10,7 +10,7 @@ export const DataProvider = ({ children }) => {
   const [username, setUsername] = useState(null);
 
   return (
-    <DataContext.Provider value={{ isLoggedIn, setLoggedIn, setToken, token, username, setUsername }}>
+    <DataContext.Provider value={{ isLoggedIn, setLoggedIn, setToken, token, username, setUsername}}>
       {children}
     </DataContext.Provider>
   );

@@ -12,7 +12,7 @@ import UserProfile from "./UserProfile";
 import { DataContext } from "@/app/datacontext";
 
 const Header = () => {
-  const {token, username} = useContext(DataContext);
+  const {token, setToken, username, setUsername} = useContext(DataContext);
   const usePathName = usePathname();
   const router = useRouter();
   // Navbar toggle
@@ -20,6 +20,16 @@ const Header = () => {
   const navbarToggleHandler = () => {
     setNavbarOpen(!navbarOpen);
   };
+
+  // set Token
+  useEffect(()=>{
+    const token = localStorage.getItem('token');
+    const name = localStorage.getItem('username');
+    if(name && token) {
+      setToken(token);
+      setUsername(name);
+    }
+  })
 
   // Sticky Navbar
   const [sticky, setSticky] = useState(false);
