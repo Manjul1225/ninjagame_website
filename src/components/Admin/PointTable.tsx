@@ -124,19 +124,19 @@ const PointTable = () => {
   };
 
   //delete player account!
-  const handleDelAcount = async (playerId) => {
-    try {
-      const response = await axios.post("/api/deleteUser", {id: playerId});
+  // const handleDelAcount = async (playerId) => {
+  //   try {
+  //     const response = await axios.post("/api/deleteUser", {id: playerId});
 
-      if (response.status == 200) {
-        toast.success("Successfully delete account!");
-      } else {
-        console.error('Failed to delete player account');
-      }
-    } catch (error) {
-      console.error('Error deleting player account:', error);
-    }
-  };
+  //     if (response.status == 200) {
+  //       toast.success("Successfully delete account!");
+  //     } else {
+  //       console.error('Failed to delete player account');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error deleting player account:', error);
+  //   }
+  // };
 
   return (
     <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden min-h-[350px]">
@@ -202,13 +202,13 @@ const PointTable = () => {
                   >
                     Add Point
                   </button>
-                  <button
+                  {/* <button
                     onClick={() => handleDelAcount(user._id)}
                     className="shadow-submit dark:shadow-submit-dark flex items-center justify-start rounded-sm bg-primary px-3 py-2 text-sm font-medium text-white duration-100 hover:bg-primary/90 mr-2"
                     type="button"
                   >
                     Del
-                  </button>
+                  </button> */}
                 </td>
               </tr>
             ))}
