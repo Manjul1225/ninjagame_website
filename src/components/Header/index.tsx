@@ -99,7 +99,7 @@ const Header = () => {
                   <ul className="block lg:flex">
                     {menuData.map((menuItem, index) => (
                       <li key={index} className={`${usePathName === menuItem.path
-                        ? "lg:-skew-x-[20deg] lg:bg-[#F4B13E]": ""} transition-opacity px-4 py-2 group relative ${(!token && ( index === 1) ? 'hidden' : '') } ${((username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2) && index === 1 ? 'hidden' : '')}`}>
+                        ? "lg:-skew-x-[20deg] lg:bg-[#F4B13E]": ""} transition-opacity px-4 py-2 group relative ${(!token && ( index === 1) ? 'hidden' : '') } ${((username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2&& username != process.env.NEXT_PUBLIC_Administrator3) && index === 1 ? 'hidden' : '')}`}>
                         {
                           <Link
                             href={menuItem.path}

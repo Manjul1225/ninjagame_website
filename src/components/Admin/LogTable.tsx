@@ -33,7 +33,7 @@ export default function LogTable() {
     if (!token) {
       push('/');
     }
-    if (username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2)
+    if (username != process.env.NEXT_PUBLIC_Administrator1 && username != process.env.NEXT_PUBLIC_Administrator2 && username != process.env.NEXT_PUBLIC_Administrator3)
       push('/');
   }
 
