@@ -17,7 +17,6 @@ const PointTable = () => {
 
   //point add by input value
   const [inputValue, setInputValue] = useState({});
-    
   const handleInputChange = ({target: {name, value}}) => {
     setInputValue(state => ({...state, [name]: value}));
   };
