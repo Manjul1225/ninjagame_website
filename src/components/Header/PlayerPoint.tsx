@@ -5,13 +5,13 @@ import { DataContext } from "@/app/datacontext"
 import axios from "axios"
 
   const PlayerPoint = () => {
-    const {username} = useContext(DataContext);
-    const [point, setPoint] = useState()
+    const [point, setPoint] = useState(0)
     const getplayerinfo = async () => {
       try {
-        const player = await axios.post('/api/getUserData', {"username":username});
+        const username = localStorage.getItem("username");
+        const player = await axios.post('/api/getUserData', {username:username});
         if (player?.data.status === 200) {
-          const updatedPoint = player?.data.user?.point || '0'; // Set point to '0' if it is null
+          const updatedPoint = player?.data.user?.point || 0; // Set point to '0' if it is null
           setPoint(updatedPoint);
         }
       } catch (error) {

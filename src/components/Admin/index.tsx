@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react";
-// import PointTable from "./PointTable";
-// import LogTable from "./LogTable";
+import PointTable from "./PointTable";
+import LogTable from "./LogTable";
 
 const Admin = () => {
   const [showPointTable, setShowPointTable] = useState(true);
@@ -38,8 +38,8 @@ const Admin = () => {
                 Logs
               </button>
             </div>
-            {/* {showPointTable && <PointTable />}
-            {showLogTable && <LogTable />} */}
+            {showPointTable && <PointTable />}
+            {showLogTable && <LogTable />}
           </div>
         </div>
       </div>
