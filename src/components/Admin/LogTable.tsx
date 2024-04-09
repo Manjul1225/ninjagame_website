@@ -28,8 +28,8 @@ export default function LogTable() {
   const { push } = useRouter()
 
   if (typeof window !== 'undefined') {
-    const username = sessionStorage.getItem('username');
-    const token = sessionStorage.getItem('token');
+    const username = localStorage.getItem('username');
+    const token = localStorage.getItem('token');
     if (!token) {
       push('/');
     }
