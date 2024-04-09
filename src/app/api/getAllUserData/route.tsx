@@ -2,7 +2,7 @@ import { connect, close } from "@/libs/mongodb"
 import { NextResponse, NextRequest } from "next/server"
 import Users from "@/models/Users";
 
-export async function GET() {
+export async function POST() {
     try {
         connect();
         let users = await Users?.find();

@@ -25,7 +25,7 @@ const PointTable = () => {
 
   const getData = async () => {
     try {
-      const users = await axios.get('/api/getAllUserData', {
+      const users = await axios.post('/api/getAllUserData', {
         headers: {
           'Content-Type': 'application/json',
         },
