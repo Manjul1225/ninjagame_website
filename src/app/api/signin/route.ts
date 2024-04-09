@@ -23,23 +23,20 @@ export async function POST(request: NextRequest, response: NextResponse) {
         
         // User is not existed
         if(user === null){
-          return NextResponse.json({ status:401, message: "Username is not existed" });
+          return NextResponse.json({status:401, message: "Username is not existed" });
         }
         
         // Password did not match
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-          return NextResponse.json({ status:402, message: "Invalid password" });
+          NextResponse.json({ status:402, message: "Invalid password" });
         }
         // Generate the token and set the cookie
         const token = generateJwtToken({'user_name':username, 'password': password});
+        localStorage.setItem('token', token);
         response = NextResponse.json({status:200, message: "User authenticated" });
-
-        response.cookies.set('token', token, {
-          httpOnly: true,
-        });
         return response
       } catch (error) {
-        return NextResponse.json({status: 500, message: "Unknown Error"});
+        NextResponse.json({status: 500, message: "Unknown Error"});
       }
 }

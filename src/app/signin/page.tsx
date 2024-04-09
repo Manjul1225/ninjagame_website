@@ -8,7 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { cookies } from "next/headers";
 
 const SigninPage = () => {
-  const { setLoggedIn, token, setToken} = useContext(DataContext);
+  const { setLoggedIn, token, setToken, setUsername} = useContext(DataContext);
   const [username, setusername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setLoading] = useState(null);
@@ -24,6 +24,7 @@ const SigninPage = () => {
     axios.post('/api/signin', credentials, {
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `${localStorage.getItem('token')}`
       },
     })
     .then((response) => {
@@ -38,6 +39,7 @@ const SigninPage = () => {
       myPromise.then(function() {
         router.push('/');
         setToken(true);
+        setUsername(username);
         setLoading(false);
       });
     })

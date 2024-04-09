@@ -1,25 +1,26 @@
-'use server'
 import { NextRequest, NextResponse } from 'next/server';
 import * as jose from 'jose';
+
 const secretKey = process.env.NEXT_PUBLIC_SecretKey;
 
-export function middleware(request:NextRequest) {
-  const token = request.cookies.get('token').value;
+export async function middleware(request: NextRequest) {
+  const token = request.headers.get("Authorization");
+  console.log(token);
 
-  if(!token) {
-    return NextResponse.redirect(new URL('/signin', request.url));
-  } 
+  // if (!token) {
+  //   return NextResponse.redirect(new URL('/signin', request.url));
+  // }
 
   try {
-    jose.jwtVerify(
-      token, new TextEncoder().encode(process.env.NEXT_PUBLIC_SecretKey)
-    );
+    // await jose.jwtVerify(token, new TextEncoder().encode(secretKey), {
+    //   algorithms: ['HS256'],
+    // });
     return NextResponse.next();
-  } catch(error){
+  } catch (error) {
     return NextResponse.redirect(new URL('/signin', request.url));
   }
 }
 
 export const config = {
-  matcher: ["/^api/(.*)", '/^(store|about|/)', '/admin', '/game', '/signin'],
+  matcher: ['/api/:path*', '/store', '/about', '/admin', '/signin'],
 };

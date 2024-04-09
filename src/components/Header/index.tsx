@@ -12,9 +12,8 @@ import UserProfile from "./UserProfile";
 import { DataContext } from "@/app/datacontext";
 
 const Header = () => {
-  const {token} = useContext(DataContext);
+  const {token, username} = useContext(DataContext);
   const usePathName = usePathname();
-  let username = null;
   const router = useRouter();
   // Navbar toggle
   const [navbarOpen, setNavbarOpen] = useState(false);
@@ -115,7 +114,7 @@ const Header = () => {
                         <Image alt="" src="images/svgs/cart.svg" width={40} height={40}/>
                       </button>
                       <UserProfile />
-                      <PlayerPoint username={username}/>
+                      <PlayerPoint/>
                     </>
                   ) : (
                     <>

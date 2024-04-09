@@ -5,8 +5,9 @@ connect();
 export async function POST(request: NextRequest, response: NextResponse) {
     try {
         const {username}  = await request.json();
-        console.log(username);
+        // console.log(username);
         const user = await Users?.findOne({ username: username });
+
         if(user !== null) { 
             return NextResponse.json({status:200, user: user});
         }

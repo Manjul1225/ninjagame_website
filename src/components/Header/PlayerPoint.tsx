@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
+import { useContext } from "react"
+import { DataContext } from "@/app/datacontext"
 import axios from "axios"
 
-  const PlayerPoint = ({ username }) => {
+  const PlayerPoint = () => {
+    const {username} = useContext(DataContext);
     const [point, setPoint] = useState()
     const getplayerinfo = async () => {
       try {
-        const player = await axios.post('/api/getUserData', username);
-        alert(player.data.status);
+        const player = await axios.post('/api/getUserData', {"username":username});
         if (player?.data.status === 200) {
-          alert("b");
           const updatedPoint = player?.data.user?.point || '0'; // Set point to '0' if it is null
           setPoint(updatedPoint);
         }
-        alert("c");
       } catch (error) {
         console.log(error);
     }
